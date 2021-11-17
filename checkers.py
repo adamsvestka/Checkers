@@ -1,21 +1,9 @@
 from __future__ import annotations
 import pygame
-import sys
-import random
-
-
-TILE_COUNT = 8
-TILE_SIZE = 100
 
 
 COLOR_BLACK = pygame.Color(0x21, 0x21, 0x21)
 COLOR_WHITE = pygame.Color(0xfa, 0xfa, 0xfa)
-
-
-pygame.init()
-pygame.display.set_caption("Checkers")
-FPS = pygame.time.Clock()
-screen = pygame.display.set_mode((TILE_COUNT * TILE_SIZE, TILE_COUNT * TILE_SIZE))
 
 
 class ColorPalette:
@@ -33,15 +21,9 @@ class ColorPalette:
         self.secondary_dark = parse_color(sd)
 
 
-COLOR_PALETTES = [
-    ColorPalette("#0d47a1", "#5472d3", "#002171", "#ffc41e", "#ffd149", "#c67100"),  # blue
-    ColorPalette("#b71c1c", "#f05545", "#7f0000", "#00a7a6", "#ff7961", "#ba000d"),  # red
-    ColorPalette("#1b5e20", "#4c8c4a", "#003300", "#d48dc4", "#ffd149", "#c67100"),  # green
-]
-
-
 class Tile:
-    size = TILE_SIZE
+    Size = 100
+    Count = 8
 
     def __init__(self, x: int, y: int):
         self.x = x
@@ -53,30 +35,32 @@ class Tile:
             return self.x == o.x and self.y == o.y
         return False
 
-    def draw(self):
-        self.rect = pygame.draw.rect(screen, COLOR_WHITE, (self.x * Tile.size, self.y * Tile.size, Tile.size, Tile.size))
+    def draw(self, screen: pygame.Surface):
+        self.rect = pygame.draw.rect(screen, COLOR_WHITE, (self.x * Tile.Size, self.y * Tile.Size, Tile.Size, Tile.Size))
 
 
 class Move:
     def __init__(self, tile: Tile, target: Piece = None):
-        self.tile = tile
+        self.target_tile = tile
         if target is not None:
-            self.target: Piece = target
-            self.capture = True
+            self.captured_piece: Piece = target
+            self.capturing = True
         else:
-            self.target = None
-            self.capture = False
+            self.captured_piece = None
+            self.capturing = False
 
 
 class Piece:
-    size = TILE_SIZE * 0.45
+    Size = Tile.Size * 0.45
 
     def __init__(self, tile: Tile, player: Player):
         self.tile: Tile = tile
-        self.active = False
+        self.is_selected = False
         self.tile.piece = self
         self.player = player
-        self.tier = False
+        self.is_king = False
+        self.animation_from: Tile = tile
+        self.animation_progress = 1
 
     def __hash__(self):
         return hash((self.tile.x, self.tile.y))
@@ -86,36 +70,37 @@ class Piece:
             return self.tile == o.tile
         return False
 
-    def moveTo(self, move: Move):
+    def moveTo(self, move: Move, game: Game):
         """
         Execute a move, automatically capturing if necessary.
 
         Returns True if further captures are possible, otherwise False.
         """
         self.tile.piece = None
-        self.tile = move.tile
+        self.tile = move.target_tile
+        self.animation_progress = 0
         self.tile.piece = self
 
-        if self.tile.y == (TILE_COUNT - 1 if self.player.direction else 0):
-            self.tier = True
-            if move.capture:
-                move.target.capture()
+        if self.tile.y == (Tile.Count - 1 if self.player.direction_down else 0):
+            self.is_king = True
+            if move.capturing:
+                move.captured_piece.capture()
             return False
 
-        if move.capture:
-            move.target.capture()
-            for move in self.getPossibleMoves():
-                if move.capture:
+        if move.capturing:
+            move.captured_piece.capture()
+            for move in self.getPossibleMoves(game):
+                if move.capturing:
                     return True
 
         return False
 
-    def getPossibleMoves(self):
+    def getPossibleMoves(self, game: Game):
         if self.player.locked_piece is not None and self.player.locked_piece is not self:
             return
 
         x, y = self.tile.x, self.tile.y
-        dir = 1 if self.player.direction else -1
+        dir = 1 if self.player.direction_down else -1
 
         def get_diagonal_tile(dx, dy):
             tile = game.getTileAt(x + dx, y + dy)
@@ -135,7 +120,7 @@ class Piece:
         if tile:
             yield tile
 
-        if self.tier:
+        if self.is_king:
             tile = get_diagonal_tile(1, -dir)
             if tile:
                 yield tile
@@ -147,215 +132,159 @@ class Piece:
         self.player.pieces.remove(self)
         self.tile.piece = None
 
-    def draw(self, moves: list[Move] = None):
-        def draw_piece(x, y, color, radius=self.size):
-            if self.tier:
-                z = Tile.size // 20
+    def draw(self, screen: pygame.Surface, moves: list[Move] = None):
+        pos_x = self.animation_from.x * (1 - self.animation_progress) + self.tile.x * self.animation_progress
+        pos_y = self.animation_from.y * (1 - self.animation_progress) + self.tile.y * self.animation_progress
+
+        if self.animation_progress < 1:
+            self.animation_progress = min(self.animation_progress + 1000 / Game.Framerate / Game.AnimationDuration, 1)
+        else:
+            self.animation_from = self.tile
+
+        def draw_piece(x, y, color, radius=self.Size):
+            if self.is_king:
+                z = Tile.Size // 20
                 a = z * 4
                 b = z * 5
-                c = Tile.size - b
+                c = Tile.Size - b
                 d = b - a
-                e = Tile.size - 2 * d
-                f = Tile.size - 2 * b
+                e = Tile.Size - 2 * d
+                f = Tile.Size - 2 * b
 
-                pygame.draw.circle(screen, color, (x * Tile.size + b, y * Tile.size + b), a)
-                pygame.draw.circle(screen, color, (x * Tile.size + c, y * Tile.size + b), a)
-                pygame.draw.circle(screen, color, (x * Tile.size + c, y * Tile.size + c), a)
-                pygame.draw.circle(screen, color, (x * Tile.size + b, y * Tile.size + c), a)
-                pygame.draw.rect(screen, color, (x * Tile.size + b, y * Tile.size + d, f, e))
-                pygame.draw.rect(screen, color, (x * Tile.size + d, y * Tile.size + b, e, f))
+                pygame.draw.circle(screen, color, (x * Tile.Size + b, y * Tile.Size + b), a)
+                pygame.draw.circle(screen, color, (x * Tile.Size + c, y * Tile.Size + b), a)
+                pygame.draw.circle(screen, color, (x * Tile.Size + c, y * Tile.Size + c), a)
+                pygame.draw.circle(screen, color, (x * Tile.Size + b, y * Tile.Size + c), a)
+                pygame.draw.rect(screen, color, (x * Tile.Size + b, y * Tile.Size + d, f, e))
+                pygame.draw.rect(screen, color, (x * Tile.Size + d, y * Tile.Size + b, e, f))
             else:
-                pygame.draw.circle(screen, color, ((x + 0.5) * Tile.size, (y + 0.5) * Tile.size), radius)
+                pygame.draw.circle(screen, color, ((x + 0.5) * Tile.Size, (y + 0.5) * Tile.Size), radius)
 
         def draw_shadow():
-            draw_piece(self.tile.x - 0.01, self.tile.y - 0.01, COLOR_BLACK)
+            draw_piece(pos_x - 0.01, pos_y - 0.01, COLOR_BLACK)
 
-        if not self.player.active or not moves:
-            draw_piece(self.tile.x, self.tile.y, self.player.color.primary_dark)
+        if not self.player.is_active or not moves:
+            draw_piece(pos_x, pos_y, self.player.color_palette.primary_dark)
 
-        elif self.active:
+        elif self.is_selected:
             draw_shadow()
-            draw_piece(self.tile.x + 0.1, self.tile.y + 0.1, self.player.color.primary_light, self.size + 1)
+            draw_piece(pos_x + 0.1, pos_y + 0.1, self.player.color_palette.primary_light, self.Size + 1)
             if moves:
                 for move in moves:
-                    draw_piece(move.tile.x, move.tile.y, self.player.color.secondary)
-                    # pygame.draw.rect(screen, self.player.color.secondary, (move.tile.x * Tile.size, move.tile.y * Tile.size, Tile.size, Tile.size))
+                    draw_piece(move.target_tile.x, move.target_tile.y, self.player.color_palette.secondary)
+                    # pygame.draw.rect(game.screen, self.player.color.secondary, (move.tile.x * Tile.size, move.tile.y * Tile.size, Tile.size, Tile.size))
 
         else:
-            draw_piece(self.tile.x, self.tile.y, self.player.color.primary)
+            draw_piece(pos_x, pos_y, self.player.color_palette.primary)
 
 
 class Player:
     def __init__(self, color: ColorPalette, direction: bool):
-        self.color = color
+        self.color_palette = color
         self.pieces: list[Piece] = []
-        self.direction = direction
-        self.active = False
+        self.direction_down = direction
+        self.is_active = False
         self.moves: dict[Piece, list[Move]] = None
         self.locked_piece: Piece = None
 
-    def get_possible_moves(self):
+    def get_possible_moves(self, game: Game):
         moves: dict[Piece, list[Move]] = {}
         capturing = False
         for piece in self.pieces:
             moves[piece] = []
-            for move in piece.getPossibleMoves():
-                if not capturing and move.capture:
+            for move in piece.getPossibleMoves(game):
+                if not capturing and move.capturing:
                     capturing = True
                     for piece in moves:
-                        moves[piece] = [move for move in moves[piece] if move.capture]
+                        moves[piece] = [move for move in moves[piece] if move.capturing]
 
-                if not capturing or move.capture:
+                if not capturing or move.capturing:
                     moves[piece].append(move)
 
         return moves
 
-    def onClick(self, tile: Tile):
+    def onClick(self, tile: Tile, game: Game):
         pass
 
-    def draw(self):
+    def draw(self, screen: pygame.Surface):
         for piece in self.pieces:
-            piece.draw()
+            piece.draw(screen)
 
-    def onTurnBegin(self):
-        self.active = True
-        self.moves = self.get_possible_moves()
+    def onTurnBegin(self, game: Game):
+        self.is_active = True
+        self.moves = self.get_possible_moves(game)
 
-    def onTurnEnd(self):
-        self.active = False
+    def run(self, game: Game):
+        pass
+
+    def onTurnEnd(self, game: Game):
+        self.is_active = False
         self.moves = None
         self.locked_piece = None
 
 
-class HumanPlayer(Player):
-    def __init__(self, color: ColorPalette, direction: bool):
-        super().__init__(color, direction)
-        self.selected_piece: Piece = None
-
-    def select_piece(self, piece: Piece):
-        if self.selected_piece is not None:
-            self.selected_piece.active = False
-        self.selected_piece = piece
-        if self.selected_piece is not None:
-            piece.active = True
-
-    def onClick(self, tile: Tile):
-        if tile.piece:
-            if tile.piece.player is self:
-                if tile.piece is not self.selected_piece:
-                    self.select_piece(tile.piece)
-                else:
-                    self.select_piece(None)
-        elif self.selected_piece:
-            for move in self.moves[self.selected_piece]:
-                if move.tile is tile:
-                    if self.selected_piece.moveTo(move):
-                        self.locked_piece = self.selected_piece
-                        self.moves = self.get_possible_moves()
-                    else:
-                        game.nextTurn()
-                    break
-
-    def draw(self):
-        for piece in self.pieces:
-            piece.draw(self.moves[piece])
-
-    def onTurnEnd(self):
-        super().onTurnEnd()
-
-        self.select_piece(None)
-
-
 class Game:
+    Framerate = 60
+    AnimationDuration = 200
+
     def __init__(self):
-        self.tiles: list[list[Tile]] = [[Tile(x, y) if (x + y) % 2 else None for y in range(TILE_COUNT)] for x in range(TILE_COUNT)]
+        pygame.init()
+        pygame.display.set_caption("Checkers")
+        self.clock = pygame.time.Clock()
+        self.screen = pygame.display.set_mode((Tile.Count * Tile.Size, Tile.Count * Tile.Size))
+
+        self.tiles: list[list[Tile]] = [[Tile(x, y) if (x + y) % 2 else None for y in range(Tile.Count)] for x in range(Tile.Count)]
 
         self.players: list[Player] = []
 
-        colors = random.sample(COLOR_PALETTES, 2)
-        self.players.append(HumanPlayer(colors[0], False))
-        self.players.append(Chuck(colors[1], True))
-        for x in range(TILE_COUNT):
-            for y in range(TILE_COUNT - 3, TILE_COUNT):
+    def setPlayers(self, Player1: function, Player2: function, colors: list[ColorPalette]):
+        self.players = [
+            Player1(colors[0], False),
+            Player2(colors[1], True)
+        ]
+
+        for x in range(Tile.Count):
+            for y in range(Tile.Count - 3, Tile.Count):
                 if self.tiles[x][y]:
                     self.players[0].pieces.append(Piece(self.tiles[x][y], self.players[0]))
             for y in range(3):
                 if self.tiles[x][y]:
                     self.players[1].pieces.append(Piece(self.tiles[x][y], self.players[1]))
 
-        self.activePlayer = self.players[-1]
+        self.active_player = self.players[-1]
+
+        self.nextTurn()
 
     def getTiles(self):
         return (tile for row in self.tiles for tile in row if tile)
 
     def getTileAt(self, x, y):
-        if x < 0 or x >= TILE_COUNT or y < 0 or y >= TILE_COUNT:
+        if x < 0 or x >= Tile.Count or y < 0 or y >= Tile.Count:
             return None
         return self.tiles[x][y]
 
     def nextTurn(self):
-        self.activePlayer.onTurnEnd()
+        self.active_player.onTurnEnd(self)
 
-        self.activePlayer = self.players[(self.players.index(self.activePlayer) + 1) % len(self.players)]
+        self.active_player = self.players[(self.players.index(self.active_player) + 1) % len(self.players)]
 
-        self.activePlayer.onTurnBegin()
+        self.active_player.onTurnBegin(self)
 
     def draw(self):
-        screen.fill(COLOR_BLACK)
+        self.screen.fill(COLOR_BLACK)
+
         for tile in self.getTiles():
-            tile.draw()
+            tile.draw(self.screen)
         for player in self.players:
-            player.draw()
+            player.draw(self.screen)
+
         pygame.display.update()
+
+    def run(self):
+        self.clock.tick(self.Framerate)
+        self.active_player.run(self)
 
     def click(self, pos: pygame.math.Vector2):
         for tile in self.getTiles():
             if tile.rect.collidepoint(pos):
-                self.activePlayer.onClick(tile)
-
-
-class Chuck(Player):
-    def onTurnBegin(self):
-        super().onTurnBegin()
-
-        if len(self.moves) == 0:
-            print("No moves")
-
-        else:
-            while True:
-                piece = random.choice(list(self.moves.keys()))
-                if len(self.moves[piece]) > 0:
-                    piecemoves = self.moves[piece]
-                    move = random.choice(piecemoves)
-                    while piece.moveTo(move):
-                        piecemoves = list(piece.getPossibleMoves())
-                        move = random.choice(piecemoves)
-                    break
-
-        game.nextTurn()
-
-
-game = Game()
-
-game.nextTurn()
-
-
-while True:
-    game.draw()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_presses = pygame.mouse.get_pressed()
-            if mouse_presses[0]:
-                game.click(pygame.mouse.get_pos())
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                pygame.image.save(screen, "screenshot.png")
-            elif event.key == pygame.K_q:
-                pygame.quit()
-                sys.exit()
-
-    FPS.tick(60)
+                self.active_player.onClick(tile, self)
