@@ -1,23 +1,25 @@
-from __future__ import annotations
+from __future__ import annotations, barry_as_FLUFL
 import pygame
 import sys
 import random
 
 from checkers import *
-from testificates import *
+from guinea_pigs.Chuck import *
+from guinea_pigs.Barbara import *
+from guinea_pigs.Alfred import *
 
 
 COLOR_PALETTES = [
-    ColorPalette("#0d47a1", "#5472d3", "#002171", "#ffc41e", "#ffd149", "#c67100"),  # blue
-    ColorPalette("#b71c1c", "#f05545", "#7f0000", "#00a7a6", "#ff7961", "#ba000d"),  # red
-    ColorPalette("#1b5e20", "#4c8c4a", "#003300", "#d48dc4", "#ffd149", "#c67100"),  # green
+    ColorPalette("#0d47a1", "#5472d3", "#002171", "#ffc41e"),  # blue
+    ColorPalette("#b71c1c", "#f05545", "#7f0000", "#00a7a6"),  # red
+    ColorPalette("#1b5e20", "#4c8c4a", "#003300", "#d48dc4"),  # green
 ]
 
 
 class HumanPlayer(Player):
-    def __init__(self, color: ColorPalette, direction: bool):
-        super().__init__(color, direction)
-        self.selected_piece: Piece = None
+    def __init__(self, color: ColorPalette, direction: bool, id: int):
+        super().__init__(color, direction, id)
+        self.selected_piece: Optional[Piece] = None
 
     def select_piece(self, piece: Piece):
         if self.selected_piece is not None:
@@ -43,9 +45,9 @@ class HumanPlayer(Player):
                         game.nextTurn()
                     break
 
-    def draw(self, screen: pygame.Surface):
+    def draw(self, game: Game):
         for piece in self.pieces:
-            piece.draw(screen, self.moves[piece] if self.moves else None)
+            piece.draw(game, self.moves[piece] if self.moves else None)
 
     def onTurnEnd(self, game: Game):
         super().onTurnEnd(game)
@@ -71,7 +73,7 @@ while True:
                 game.click(pygame.mouse.get_pos())
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                pygame.image.save(game.screen, "screenshot.png")
+                game.screenshot("screenshot")
             elif event.key == pygame.K_q:
                 pygame.quit()
                 sys.exit()
