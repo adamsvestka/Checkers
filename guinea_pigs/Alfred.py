@@ -9,8 +9,8 @@ class Alfred(Player):
     What, where am I? What is this?!?
     """
 
-    def __init__(self, color: ColorPalette, direction: bool, id: int):
-        super().__init__(color, direction, id)
+    def __init__(self, color: ColorPalette, direction: bool):
+        super().__init__(color, direction)
 
         self.animating_piece: Optional[Piece] = None
 

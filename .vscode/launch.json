@@ -5,13 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Test AIs",
-            "type": "python",
-            "request": "launch",
-            "program": "test.py",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Python: Launch Project",
             "type": "python",
             "request": "launch",

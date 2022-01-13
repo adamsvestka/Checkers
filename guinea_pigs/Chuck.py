@@ -8,10 +8,12 @@ class Chuck(Player):
     In the shadows I have seen thee, O Alfred!
     """
 
-    def __init__(self, color: ColorPalette, direction: bool, id: int):
-        super().__init__(color, direction, id)
+    def __init__(self, color: ColorPalette, direction: bool):
+        super().__init__(color, direction)
 
         self.animating_piece: Optional[Piece] = None
+
+        self.queue: list[Move] = []
 
     def get_animating_piece(self, game: Game):
         if game.no_gui:
@@ -31,31 +33,42 @@ class Chuck(Player):
                     self.animating_piece = piece
                     return self.animating_piece
 
+    def rank_moves(self, game: Game):
+        heirarchy = []
+
+        def traverse(game: Game, move: Move, previous: list[Move]):
+            vg = VirtualGame(game)
+            this = vg.get_player(self)
+            if moves := vg.simulate(piece, move):
+                vg.active_player.locked_piece = piece
+                for move in moves:
+                    traverse(vg, move, previous + [move])
+            else:
+                score = this.calculateScore()
+                heirarchy.append((score, piece, previous))
+
+        for piece, moves in self.moves.items():
+            for move in moves:
+                traverse(game, move, [move])
+
+        heirarchy.sort(key=lambda x: x[0], reverse=True)
+        return heirarchy[0][1:]
+
     def run(self, game: Game):
         if self.get_animating_piece(game) is not None:
             return
 
         else:
-            moves = [piece for piece, move in self.moves.items() if len(move) > 0]
+            if not self.queue:
+                self.locked_piece, self.queue = self.rank_moves(game)
 
-            best = (-1, None, None)
-            for piece in moves:
-                for move in self.moves[piece]:
-                    vg = VirtualGame(piece, move, game)
-                    score = vg.players[self.id].calculateScore()
-                    # vg.draw()
-                    # vg.draw()
-                    # vg.screenshot(f"screenshot")
-                    if not game.no_gui:
-                        print(score)
-                    if score > best[0]:
-                        best = (score, piece, move)
+            move = self.queue.pop(0)
+            move.captured_piece = next(p for p in game.other_player(self).pieces if p.uid == move.captured_piece.uid) if move.captured_piece else None
 
-            piece, move = best[1:]
-            self.animating_piece = piece
-            if piece.moveTo(move, game):
-                self.locked_piece = piece
-                self.moves = self.get_possible_moves(game)
+            self.animating_piece = self.locked_piece
+            self.locked_piece.moveTo(move, game)
+
+            if self.queue:
                 return
 
         game.nextTurn()

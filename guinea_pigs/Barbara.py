@@ -7,8 +7,8 @@ class Barbara(Player):
     Always forward. Forward, always.
     """
 
-    def __init__(self, color: ColorPalette, direction: bool, id: int):
-        super().__init__(color, direction, id)
+    def __init__(self, color: ColorPalette, direction: bool):
+        super().__init__(color, direction)
 
         self.animating_piece: Optional[Piece] = None
 
@@ -41,7 +41,7 @@ class Barbara(Player):
             for piece in moves:
                 for move in self.moves[piece]:
                     vg = VirtualGame(piece, move, game)
-                    score = vg.players[self.id].calculateScore()
+                    score = vg.players[self.uid].calculateScore()
                     if not game.no_gui:
                         print(score)
                     if score > best[0]:
