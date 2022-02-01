@@ -41,12 +41,11 @@ class BoardTest(unittest.TestCase):
         self.assertFalse(Board.IsTile(vec2(1, 1)))
 
     def test_adjecent_tiles(self):
-        self.assertCountEqual(Board.AdjacentTiles(vec2(0, 0)), [])
-        self.assertCountEqual(Board.AdjacentTiles(vec2(0, 1)), {
+        self.assertCountEqual(list(Board.AdjacentTiles(vec2(0, 1))), {
             vec2(1, 0),
             vec2(1, 2),
         })
-        self.assertCountEqual(Board.AdjacentTiles(vec2(1, 2)), {
+        self.assertCountEqual(list(Board.AdjacentTiles(vec2(1, 2))), {
             vec2(0, 1),
             vec2(0, 3),
             vec2(2, 1),
@@ -55,69 +54,69 @@ class BoardTest(unittest.TestCase):
 
     def test_board_copy(self):
         board = Board()
-        board_copy = Board.FromString(board.grid)
+        board_copy = board.copy()
         self.assertEqual(board.grid, board_copy.grid)
 
     def test_tile_empty(self):
         self.assertEqual(Board().get(vec2(0, 0)), Tile.NO_TILE)
 
     def test_possible_moves(self):
-        board = Board.FromString(START_BOARD)
-        self.assertCountEqual(board.get_piece_moves(vec2(0, 1)), [])
-        self.assertCountEqual(board.get_piece_moves(vec2(1, 2)), {
-            vec2(0, 3),
-            vec2(2, 3),
+        board = Board(START_BOARD)
+        self.assertCountEqual(list(board.get_piece_moves(vec2(0, 1))), [])
+        self.assertCountEqual(list(board.get_piece_moves(vec2(1, 2))), {
+            (vec2(0, 3), False),
+            (vec2(2, 3), False),
         })
-        self.assertCountEqual(board.get_piece_moves(vec2(Tile.Count - 1, 2)), {
-            vec2(Tile.Count - 2, 3),
+        self.assertCountEqual(list(board.get_piece_moves(vec2(Tile.Count - 1, 2))), {
+            (vec2(Tile.Count - 2, 3), False),
         })
-        self.assertCountEqual(board.get_piece_moves(vec2(2, 5)), {
-            vec2(1, 4),
-            vec2(3, 4),
+        self.assertCountEqual(list(board.get_piece_moves(vec2(2, 5))), {
+            (vec2(1, 4), False),
+            (vec2(3, 4), False),
         })
 
     def test_possible_moves_2(self):
-        board = Board.FromString(BOARD1)
+        board = Board(BOARD1)
         self.assertCountEqual(board.get_piece_moves(vec2(3, 2)), {
-            vec2(1, 0),
+            (vec2(1, 0), True),
         })
 
     def test_move(self):
-        board = Board.FromString(BOARD1)
+        board = Board(BOARD1)
         tile = vec2(3, 2)
-        move = next(board.get_piece_moves(tile))
+        move, capturing = next(board.get_piece_moves(tile))
         board.move(tile, move)
         self.assertEqual(board.get(tile), Tile.EMPTY)
         self.assertEqual(board.get(vec2(2, 1)), Tile.EMPTY)
         self.assertEqual(board.get(move).piece.player, Player.ONE)
 
     def test_player_pieces(self):
-        board = Board.FromString(START_BOARD)
+        board = Board(START_BOARD)
         self.assertEqual(len(list(board.get_player_pieces(Player.ONE))), 12)
 
-        board2 = Board.FromString(BOARD1)
-        self.assertCountEqual(board2.get_player_pieces(Player.ONE), {
+        board2 = Board(BOARD1)
+        self.assertCountEqual(list(board2.get_player_pieces(Player.ONE)), {
             vec2(3, 2),
             vec2(4, 1),
         })
-        self.assertCountEqual(board2.get_player_pieces(Player.TWO), {
+        self.assertCountEqual(list(board2.get_player_pieces(Player.TWO)), {
             vec2(2, 1),
         })
 
-    def test_possible_moves(self):
-        board = Board.FromString(START_BOARD)
-        self.assertEqual(len(list(board.get_player_moves(Player.ONE))), 7)
+    # def test_possible_moves(self):
+    #     board = Board(START_BOARD)
+    #     self.assertEqual(len(list(board.get_player_moves(Player.ONE))), 7)
 
-        board2 = Board.FromString(BOARD1)
-        self.assertCountEqual(board2.get_player_moves(Player.ONE), {
-            vec2(1, 0),
-            vec2(3, 0),
-            vec2(5, 0),
-        })
-        self.assertCountEqual(board2.get_player_moves(Player.TWO), {
-            vec2(4, 3),
-            vec2(1, 2),
-        })
+    #     board2 = Board(BOARD1)
+    #     self.assertCountEqual(list(board2.get_player_moves(Player.ONE)), {
+    #         vec2(1, 0),
+    #         vec2(3, 0),
+    #         vec2(5, 0),
+    #     })
+    #     self.assertCountEqual(list(board2.get_player_moves(Player.TWO)), {
+    #         vec2(4, 3),
+    #         vec2(1, 2),
+    #     })
 
     def test_player_moves(self):
         class VirtualGame:
@@ -125,16 +124,18 @@ class BoardTest(unittest.TestCase):
                 self.active_player = Player.ONE
                 self.moves = {}
                 self.board = board
+                self.locked_piece = None
+                self.check_win = lambda: None
 
             def generate_moves(self):
                 return Game.generate_moves(self)
 
-        game = VirtualGame(Board.FromString(START_BOARD))
+        game = VirtualGame(Board(START_BOARD))
         Game.generate_moves(game)
         self.assertEqual(len(game.moves), 4)
         self.assertEqual(sum(map(len, game.moves.values())), 7)
 
-        game2 = VirtualGame(Board.FromString(BOARD1))
+        game2 = VirtualGame(Board(BOARD1))
         Game.generate_moves(game2)
         self.assertCountEqual(itertools.chain(*game2.moves.values()), {
             vec2(1, 0),

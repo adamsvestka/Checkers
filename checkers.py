@@ -1,31 +1,35 @@
 from __future__ import annotations
 from typing import Generator, Optional
-from itertools import product
 from collections import defaultdict
 from dataclasses import dataclass
+from random import choices
+from os import environ
 import sys
 import pygame
 
 import computer
 
+DEBUG = int(environ.get("DEBUG", "0"))
 
 COLOR_BLACK = pygame.Color(0x21, 0x21, 0x21)
 COLOR_WHITE = pygame.Color(0xfa, 0xfa, 0xfa)
 
 
 class ColorPalette:
-    def __init__(self, p, pl, pd, s=None, sl=None, sd=None):
-        def parse_color(string):
-            if string:
+    def __init__(self, *params):
+        params = iter(params)
+
+        def parse_color():
+            if string := next(params, None):
                 return pygame.Color(int(string[1:3], 16), int(string[3:5], 16), int(string[5:7], 16))
             else:
                 return pygame.Color(0, 0, 0)
-        self.primary = parse_color(p)
-        self.primary_light = parse_color(pl)
-        self.primary_dark = parse_color(pd)
-        self.secondary = parse_color(s)
-        self.secondary_light = parse_color(sl)
-        self.secondary_dark = parse_color(sd)
+        self.primary = parse_color()
+        self.primary_light = parse_color()
+        self.primary_dark = parse_color()
+        self.secondary = parse_color()
+        self.secondary_light = parse_color()
+        self.secondary_dark = parse_color()
 
 
 COLOR_PALETTES = [
@@ -86,10 +90,7 @@ class Tile:
     NO_TILE: Tile
     EMPTY: Tile
 
-    def __init__(self, c: str, b: Optional[bool] = None):
-        if b is not None:
-            self.piece = Piece(c)
-
+    def __init__(self, c: str):
         self._value = c
         self.piece = Piece(c) if c not in " ." else None
 
@@ -125,8 +126,10 @@ class Player:
         return Player.Players[1 - Player.Players.index(self)]
 
 
-Player.ONE = Player(COLOR_PALETTES[0], "Player 1")
-Player.TWO = Player(COLOR_PALETTES[1], "Player 2")
+c1, c2 = choices(COLOR_PALETTES, k=2)
+
+Player.ONE = Player(c1, "Player")
+Player.TWO = Player(c2, "Computer")
 Player.Players = [Player.ONE, Player.TWO]
 
 
@@ -146,6 +149,7 @@ class Game:
         self.locked_piece: Optional[vec2] = None
 
         self.moves: defaultdict[vec2, list[vec2]] = defaultdict(list)
+        self.computer_data: tuple[list[tuple[vec2, vec2]], int, int, int] = ([], 0, 0, 5)
         self.generate_moves()
 
     def draw(self):
@@ -154,7 +158,7 @@ class Game:
             self.drawer.draw(self)
 
     def handle_click(self, click: pygame.math.Vector2):
-        for pos in Board._AllTiles():
+        for pos in Board.AllTiles:
             rect = pygame.Rect(pos.x * Tile.Size, pos.y * Tile.Size, Tile.Size, Tile.Size)
             if rect.collidepoint(click):
                 if (piece := self.board.get(pos).piece) and piece.player == self.active_player == Player.ONE and pos != self.selected_piece and self.get_moves(pos):
@@ -170,8 +174,8 @@ class Game:
         capturing_moves: defaultdict[vec2, list[vec2]] = defaultdict(list)
         all_moves: defaultdict[vec2, list[vec2]] = defaultdict(list)
         for tile in [self.locked_piece] if self.locked_piece else self.board.get_player_pieces(self.active_player):
-            for move in self.board.get_piece_moves(tile):
-                if move.distance(tile) == 2:
+            for move, capturing in self.board.get_piece_moves(tile):
+                if capturing:
                     capturing_moves[tile].append(move)
                 all_moves[tile].append(move)
         self.moves = capturing_moves or (defaultdict(list) if self.locked_piece else all_moves)
@@ -204,7 +208,7 @@ class Game:
         self.check_win()
 
     def check_win(self):
-        if not next(self.board.get_player_pieces(self.active_player), False) and not self.moves:
+        if not next(self.board.get_player_pieces(self.active_player), False) or not self.moves:
             self.victor = Player.other(self.active_player)
 
     def update(self):
@@ -214,7 +218,7 @@ class Game:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_presses = pygame.mouse.get_pressed()
-                if mouse_presses[0] and not self.victor:
+                if mouse_presses[0] and self.active_player == Player.ONE and not self.victor:
                     self.handle_click(pygame.mouse.get_pos())
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -223,18 +227,27 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
-        if self.active_player == Player.TWO and not self.victor:
-            for move in computer.run(self.board, self.active_player):
-                self.move_piece(*move)
+        if self.active_player == Player.TWO and not self.victor and not self.drawer.animating:
+            if not self.computer_data[0]:
+                self.computer_data = computer.run(self.board, self.active_player)
+            else:
+                self.move_piece(*self.computer_data[0].pop(0))
 
         self.clock.tick(Drawer.Framerate)
 
 
 class Board:
-    def __init__(self):
+    AllTiles = list(vec2(x, y) for y in range(Tile.Count) for x in range(Tile.Count))
+    Tiles = list(vec for vec in AllTiles if (vec.x + vec.y) % 2)
+
+    def __init__(self, string: str | None = None):
+        if string:
+            self.grid = string
+            return
+
         self.grid = " " * Tile.Count * Tile.Count
 
-        for pos in Board.Tiles():
+        for pos in Board.Tiles:
             self.set(pos, Tile("."))
             if pos.y < 3:
                 self.set(pos, Tile("2"))
@@ -242,19 +255,23 @@ class Board:
                 self.set(pos, Tile("1"))
 
     def copy(self):
-        return Board.FromString(self.grid)
+        return Board(self.grid)
 
     def score(self, player: Player) -> int:
         other = Player.other(player)
 
         def evaluate(pos: vec2) -> int:
             piece = self.get(pos).piece
-            return (
-                + 1
-                + (5 if piece.king else 0)
-                + (2 if pos.x == 0 or pos.x == Tile.Count - 1 else 0)
-                + (2 if pos.y == 0 or pos.y == Tile.Count - 1 else 0)
-            )
+            if not piece.king:
+                return (
+                    + 3
+                    + (1 if pos.x == 0 or pos.x == Tile.Count - 1 else 0)
+                    + (1 if pos.y == 0 or pos.y == Tile.Count - 1 else 0)
+                )
+            else:
+                return (
+                    7
+                )
 
         return sum(map(evaluate, self.get_player_pieces(player))) - sum(map(evaluate, self.get_player_pieces(other)))
 
@@ -275,35 +292,25 @@ class Board:
     def IsTile(pos: vec2) -> bool:
         return Board.IsInBoard(pos) and (pos.x + pos.y) % 2
 
-    def _AllTiles() -> Generator[vec2]:
-        for pos in vectorize(product(range(Tile.Count), repeat=2)):
-            yield pos
-
-    def Tiles() -> Generator[vec2]:
-        for pos in Board._AllTiles():
-            if Board.IsTile(pos):
-                yield pos
-
     def AdjacentTiles(pos: vec2) -> Generator[vec2]:
-        if not Board.IsTile(pos):
-            return
-        for tile in vectorize(product(range(pos.x - 1, pos.x + 2), range(pos.y - 1, pos.y + 2))):
-            if Board.IsTile(tile) and pos != tile:
-                yield tile
+        directions = [vec2(1, 1), vec2(1, -1), vec2(-1, 1), vec2(-1, -1)]
+        for direction in directions:
+            if Board.IsInBoard(res := pos + direction):
+                yield res
 
     def get_player_pieces(self, player: Player) -> Generator[vec2]:
-        for tile in Board.Tiles():
+        for tile in Board.Tiles:
             if (piece := self.get(tile).piece) and piece.player == player:
                 yield tile
 
-    def get_piece_moves(self, pos: vec2) -> Generator[vec2]:
+    def get_piece_moves(self, pos: vec2) -> Generator[tuple[vec2, bool]]:
         if piece := self.get(pos).piece:
             for tile in Board.AdjacentTiles(pos):
                 if (piece.king or ((tile.y > pos.y) == (piece.player == Player.TWO))):
                     if (target := self.get(tile)).empty():
-                        yield tile
-                    elif target.piece.player != piece.player and self.get(tile + (tile - pos)).empty():
-                        yield tile + (tile - pos)
+                        yield tile, False
+                    elif target.piece.player != piece.player and self.get(res := tile + (tile - pos)).empty():
+                        yield res, True
 
     def move(self, pos: vec2, pos2: vec2) -> None:
         if (tile := self.get(pos)).piece:
@@ -311,11 +318,6 @@ class Board:
             self.set(pos, Tile.EMPTY)
             if center := pos.center(pos2):
                 self.set(center, Tile.EMPTY)
-
-    def FromString(string: str) -> Board:
-        board = Board()
-        board.grid = string
-        return board
 
 
 @dataclass
@@ -351,12 +353,15 @@ class Drawer:
     def draw(self, game: Game) -> None:
         self.screen.fill(COLOR_BLACK)
 
-        for tile in Board.Tiles():
+        for tile in Board.Tiles:
             self.draw_tile(tile)
 
         for player in Player.Players:
             for tile in game.board.get_player_pieces(player):
                 self.draw_piece(tile, game)
+
+        if DEBUG >= 1:
+            self.draw_debug(game)
 
         if game.victor:
             self.draw_victory(game.victor)
@@ -390,7 +395,7 @@ class Drawer:
         piece = game.board.get(pos).piece
         colors = piece.player.colors
         active = game.active_player == piece.player == Player.ONE
-        selected = game.selected_piece == pos
+        selected = game.selected_piece == pos and piece.player == Player.ONE
         moves = list(game.get_moves(pos))
 
         def draw_piece(x, y, color, radius=Piece.Size):
@@ -429,12 +434,25 @@ class Drawer:
             for move in moves:
                 draw_piece(move.x, move.y, colors.secondary)
 
-    # def draw_debug(self, game: Game):
-    #     def print_text(y, text):
-    #         surface = self.font_debug.render(text, False, self.players[1].color_palette.secondary)
-    #         pygame.draw.rect(self.screen, (0, 0, 0), (0, y * self.font_debug.get_height(), surface.get_width(), surface.get_height()))
-    #         self.screen.blit(surface, (0, y * self.font_debug.get_height()))
+    def draw_debug(self, game: Game):
+        for tile in Board.Tiles:
+            surface = self.font_debug.render(f"{tile.x},{tile.y}", True, COLOR_BLACK)
+            self.screen.blit(surface, (tile.x * Tile.Size, tile.y * Tile.Size))
 
-    #     print_text(0, f"Active player: {game.active_player.__class__.__name__}")
-    #     for i in range(len(Player.Players)):
-    #         print_text(i + 1, f"{game.players[i].__class__.__name__}"s score: {self.players[i].calculateScore()}")
+        surfaces: list[pygame.Surface] = []
+
+        def print_text(y, text):
+            surfaces.append(self.font_debug.render(text, False, COLOR_WHITE))
+            pygame.draw.rect(self.screen, (0, 0, 0), (0, y * self.font_debug.get_height(), surface.get_width(), surface.get_height()))
+            self.screen.blit(surface, (0, y * self.font_debug.get_height()))
+
+        print_text(0, f"Active player: {game.active_player.name}")
+        print_text(1, f"Selected piece: {game.selected_piece}")
+        print_text(2, f"Computer score: {game.computer_data[1]}")
+        print_text(2, f"Elapsed time: {game.computer_data[2]} / 2000")
+        print_text(2, f"Minimax depth: {game.computer_data[3]} / 7")
+
+        width = max(map(pygame.Surface.get_width, surfaces))
+        pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, width, len(surfaces) * self.font_debug.get_height()))
+        for y, surface in enumerate(surfaces):
+            self.screen.blit(surface, (0, y * self.font_debug.get_height()))

@@ -1,3 +1,4 @@
+import init
 from checkers import Game
 
 game = Game()
