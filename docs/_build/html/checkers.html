@@ -38,7 +38,19 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Checkers game</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Checkers game</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#board">Board</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#colorpalette">ColorPalette</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#drawer">Drawer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game">Game</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#piece">Piece</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pieceanimation">PieceAnimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#player">Player</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tile">Tile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vec2">vec2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vectorize">vectorize</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="computer.html">Computer AI</a></li>
 <li class="toctree-l1"><a class="reference internal" href="env.html">Enviroment variables</a></li>
 </ul>
@@ -67,8 +79,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-checkers">
-<span id="checkers-game"></span><h1>Checkers game<a class="headerlink" href="#module-checkers" title="Permalink to this headline"></a></h1>
+  <section id="checkers-game">
+<h1>Checkers game<a class="headerlink" href="#checkers-game" title="Permalink to this headline"></a></h1>
+<section id="board">
+<h2>Board<a class="headerlink" href="#board" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Board">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Board</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Board" title="Permalink to this definition"></a></dt>
@@ -264,6 +278,9 @@ Capturing a piece means the piece is removed from the board.</p>
 
 </dd></dl>
 
+</section>
+<section id="colorpalette">
+<h2>ColorPalette<a class="headerlink" href="#colorpalette" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.ColorPalette">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">ColorPalette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.ColorPalette" title="Permalink to this definition"></a></dt>
@@ -345,6 +362,9 @@ Capturing a piece means the piece is removed from the board.</p>
 <p>Secondary light and dark variants are currently unused and don’t have to be set.</p>
 </dd></dl>
 
+</section>
+<section id="drawer">
+<h2>Drawer<a class="headerlink" href="#drawer" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Drawer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Drawer</span></span><a class="headerlink" href="#checkers.Drawer" title="Permalink to this definition"></a></dt>
@@ -515,7 +535,7 @@ Capturing a piece means the piece is removed from the board.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="checkers.Drawer.save_screenshot">
 <span class="sig-name descname"><span class="pre">save_screenshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.save_screenshot" title="Permalink to this definition"></a></dt>
-<dd><p>Saves a screenshot of the game as <code class="docutils literal notranslate"><span class="pre">name.png</span></code>.</p>
+<dd><p>Saves a screenshot of the game as <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;.png</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -526,6 +546,9 @@ Capturing a piece means the piece is removed from the board.</p>
 
 </dd></dl>
 
+</section>
+<section id="game">
+<h2>Game<a class="headerlink" href="#game" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Game">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><a class="headerlink" href="#checkers.Game" title="Permalink to this definition"></a></dt>
@@ -751,6 +774,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="piece">
+<h2>Piece<a class="headerlink" href="#piece" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Piece">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Piece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Piece" title="Permalink to this definition"></a></dt>
@@ -806,6 +832,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="pieceanimation">
+<h2>PieceAnimation<a class="headerlink" href="#pieceanimation" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.PieceAnimation">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">PieceAnimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.PieceAnimation" title="Permalink to this definition"></a></dt>
@@ -830,6 +859,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="player">
+<h2>Player<a class="headerlink" href="#player" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Player">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_palette</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.ColorPalette" title="checkers.ColorPalette"><span class="pre">checkers.ColorPalette</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Player" title="Permalink to this definition"></a></dt>
@@ -895,6 +927,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="tile">
+<h2>Tile<a class="headerlink" href="#tile" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.Tile">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Tile" title="Permalink to this definition"></a></dt>
@@ -966,6 +1001,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="vec2">
+<h2>vec2<a class="headerlink" href="#vec2" title="Permalink to this headline"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="checkers.vec2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">vec2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.vec2" title="Permalink to this definition"></a></dt>
@@ -1036,6 +1074,9 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 
 </dd></dl>
 
+</section>
+<section id="vectorize">
+<h2>vectorize<a class="headerlink" href="#vectorize" title="Permalink to this headline"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="checkers.vectorize">
 <span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">vectorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.vectorize" title="Permalink to this definition"></a></dt>
@@ -1050,6 +1091,7 @@ If it’s the computer’s turn, queries the computer for a move.</p>
 </dl>
 </dd></dl>
 
+</section>
 </section>
 
 

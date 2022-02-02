@@ -1,6 +1,9 @@
 Enviroment variables
 ====================
 
-.. automodule:: env
-   :members:
-   :undoc-members:
+
+.. autodata:: env.DEBUG
+
+.. autodata:: env.TARGET_TIME
+
+.. autodata:: env.MINIMUM_DEPTH
