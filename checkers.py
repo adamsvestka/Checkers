@@ -1,25 +1,24 @@
 from __future__ import annotations
 from typing import Generator, Optional
+from env import DEBUG, TARGET_TIME, MINIMUM_DEPTH
 from collections import defaultdict
 from dataclasses import dataclass
-from random import choices
-from os import environ
+from random import sample
 import sys
 import pygame
 
 import computer
 
-DEBUG = int(environ.get("DEBUG", "0"))
 
 COLOR_BLACK = pygame.Color(0x21, 0x21, 0x21)
 COLOR_WHITE = pygame.Color(0xfa, 0xfa, 0xfa)
 
 
 class ColorPalette:
-    def __init__(self, *params):
+    def __init__(self, *params: str):
         params = iter(params)
 
-        def parse_color():
+        def parse_color() -> pygame.Color:
             if string := next(params, None):
                 return pygame.Color(int(string[1:3], 16), int(string[3:5], 16), int(string[5:7], 16))
             else:
@@ -126,7 +125,7 @@ class Player:
         return Player.Players[1 - Player.Players.index(self)]
 
 
-c1, c2 = choices(COLOR_PALETTES, k=2)
+c1, c2 = sample(COLOR_PALETTES, 2)
 
 Player.ONE = Player(c1, "Player")
 Player.TWO = Player(c2, "Computer")
@@ -149,7 +148,7 @@ class Game:
         self.locked_piece: Optional[vec2] = None
 
         self.moves: defaultdict[vec2, list[vec2]] = defaultdict(list)
-        self.computer_data: tuple[list[tuple[vec2, vec2]], int, int, int] = ([], 0, 0, 5)
+        self.computer_data: tuple[list[tuple[vec2, vec2]], int, int, int] = ([], 0, TARGET_TIME, MINIMUM_DEPTH)
         self.generate_moves()
 
     def draw(self):
@@ -449,8 +448,8 @@ class Drawer:
         print_text(0, f"Active player: {game.active_player.name}")
         print_text(1, f"Selected piece: {game.selected_piece}")
         print_text(2, f"Computer score: {game.computer_data[1]}")
-        print_text(2, f"Elapsed time: {game.computer_data[2]} / 2000")
-        print_text(2, f"Minimax depth: {game.computer_data[3]} / 7")
+        print_text(2, f"Elapsed time: {game.computer_data[2]} / {TARGET_TIME}")
+        print_text(2, f"Minimax depth: {game.computer_data[3]} / {MINIMUM_DEPTH}")
 
         width = max(map(pygame.Surface.get_width, surfaces))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, width, len(surfaces) * self.font_debug.get_height()))

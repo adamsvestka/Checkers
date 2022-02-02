@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Generator
 if TYPE_CHECKING:
     from checkers import Board, Player, vec2
+from env import DEBUG, TARGET_TIME, MINIMUM_DEPTH
 
 import math
 import time
@@ -9,10 +10,6 @@ import cProfile
 from collections import defaultdict
 from dataclasses import dataclass
 from scipy.optimize import curve_fit
-from os import environ
-
-# 0: normal, 1: timing, 2: profiling, 3: dump
-DEBUG = int(environ.get("DEBUG", "0"))
 
 
 @dataclass
@@ -107,9 +104,8 @@ def minimax(board: Board, player: Player, depth: int = 7, maximizing: bool = Tru
         return best
 
 
-target_duration = 1500
+depth = MINIMUM_DEPTH
 samples = []
-depth = 7
 
 
 def run(board: Board, player: Player) -> tuple[list[tuple[vec2, vec2]], int, int, int]:
@@ -137,6 +133,6 @@ def run(board: Board, player: Player) -> tuple[list[tuple[vec2, vec2]], int, int
     samples.append((depth, elapsed))
     def func(x, a): return a ** x
     (factor,), _ = curve_fit(func, *zip(*samples[-5:]))
-    depth = max(5, int(math.log(target_duration, factor)))
+    depth = max(MINIMUM_DEPTH, int(math.log(TARGET_TIME, factor)))
 
     return list(zip(moves, moves[1:])), score, int(elapsed), depth
