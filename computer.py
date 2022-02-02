@@ -108,6 +108,14 @@ depth = MINIMUM_DEPTH
 samples = []
 
 
+@dataclass
+class ComputerData:
+    compound_move: list[tuple[vec2, vec2]]
+    achievable_score: int
+    compute_time: int
+    search_depth: int
+
+
 def run(board: Board, player: Player) -> tuple[list[tuple[vec2, vec2]], int, int, int]:
     global cache, cached, depth
     cache = {}
@@ -135,4 +143,4 @@ def run(board: Board, player: Player) -> tuple[list[tuple[vec2, vec2]], int, int
     (factor,), _ = curve_fit(func, *zip(*samples[-5:]))
     depth = max(MINIMUM_DEPTH, int(math.log(TARGET_TIME, factor)))
 
-    return list(zip(moves, moves[1:])), score, int(elapsed), depth
+    return ComputerData(list(zip(moves, moves[1:])), score, int(elapsed), depth)

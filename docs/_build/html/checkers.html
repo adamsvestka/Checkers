@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkers game &mdash; Checkers 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Computer AI" href="computer.html" />
+    <link rel="prev" title="Welcome to Checkers’ documentation!" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Checkers
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Checkers game</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computer.html">Computer AI</a></li>
+<li class="toctree-l1"><a class="reference internal" href="env.html">Enviroment variables</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Checkers</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Checkers game</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/checkers.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-checkers">
+<span id="checkers-game"></span><h1>Checkers game<a class="headerlink" href="#module-checkers" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Board">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Board</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Board" title="Permalink to this definition"></a></dt>
+<dd><p>Manages the game board.</p>
+<p>Create a new board with the default configuration or from a string.</p>
+<p>Default board configuration:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot; 2 2 2 2&quot;</span>
+    <span class="s2">&quot;2 2 2 2 &quot;</span>
+    <span class="s2">&quot; 2 2 2 2&quot;</span>
+    <span class="s2">&quot;. . . . &quot;</span>
+    <span class="s2">&quot; . . . .&quot;</span>
+    <span class="s2">&quot;1 1 1 1 &quot;</span>
+    <span class="s2">&quot; 1 1 1 1&quot;</span>
+    <span class="s2">&quot;1 1 1 1 &quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>string</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, optional) – The string representation of the board. A string of length <code class="docutils literal notranslate"><span class="pre">Tile.Count</span> <span class="pre">*</span> <span class="pre">Tile.Count</span></code> and containing only <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">.12ab&quot;</span></code>.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Board.grid">
+<span class="sig-name descname"><span class="pre">grid</span></span><a class="headerlink" href="#checkers.Board.grid" title="Permalink to this definition"></a></dt>
+<dd><p>A string representation of the board.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.AdjacentTiles">
+<span class="sig-name descname"><span class="pre">AdjacentTiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.Board.AdjacentTiles" title="Permalink to this definition"></a></dt>
+<dd><p>Return an iterator of all adjacent tiles to the given position.</p>
+<p>Does not check if the position is a valid tile, it will return diagonally adjacent tiles either way.
+However, it will not return tiles that are not within the board.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position to get the adjacent tiles for.</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a> – The adjacent tile.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Board.AllTiles">
+<span class="sig-name descname"><span class="pre">AllTiles</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[vec2(0,</span> <span class="pre">0),</span> <span class="pre">vec2(1,</span> <span class="pre">0),</span> <span class="pre">vec2(2,</span> <span class="pre">0),</span> <span class="pre">vec2(3,</span> <span class="pre">0),</span> <span class="pre">vec2(4,</span> <span class="pre">0),</span> <span class="pre">vec2(5,</span> <span class="pre">0),</span> <span class="pre">vec2(6,</span> <span class="pre">0),</span> <span class="pre">vec2(7,</span> <span class="pre">0),</span> <span class="pre">vec2(0,</span> <span class="pre">1),</span> <span class="pre">vec2(1,</span> <span class="pre">1),</span> <span class="pre">vec2(2,</span> <span class="pre">1),</span> <span class="pre">vec2(3,</span> <span class="pre">1),</span> <span class="pre">vec2(4,</span> <span class="pre">1),</span> <span class="pre">vec2(5,</span> <span class="pre">1),</span> <span class="pre">vec2(6,</span> <span class="pre">1),</span> <span class="pre">vec2(7,</span> <span class="pre">1),</span> <span class="pre">vec2(0,</span> <span class="pre">2),</span> <span class="pre">vec2(1,</span> <span class="pre">2),</span> <span class="pre">vec2(2,</span> <span class="pre">2),</span> <span class="pre">vec2(3,</span> <span class="pre">2),</span> <span class="pre">vec2(4,</span> <span class="pre">2),</span> <span class="pre">vec2(5,</span> <span class="pre">2),</span> <span class="pre">vec2(6,</span> <span class="pre">2),</span> <span class="pre">vec2(7,</span> <span class="pre">2),</span> <span class="pre">vec2(0,</span> <span class="pre">3),</span> <span class="pre">vec2(1,</span> <span class="pre">3),</span> <span class="pre">vec2(2,</span> <span class="pre">3),</span> <span class="pre">vec2(3,</span> <span class="pre">3),</span> <span class="pre">vec2(4,</span> <span class="pre">3),</span> <span class="pre">vec2(5,</span> <span class="pre">3),</span> <span class="pre">vec2(6,</span> <span class="pre">3),</span> <span class="pre">vec2(7,</span> <span class="pre">3),</span> <span class="pre">vec2(0,</span> <span class="pre">4),</span> <span class="pre">vec2(1,</span> <span class="pre">4),</span> <span class="pre">vec2(2,</span> <span class="pre">4),</span> <span class="pre">vec2(3,</span> <span class="pre">4),</span> <span class="pre">vec2(4,</span> <span class="pre">4),</span> <span class="pre">vec2(5,</span> <span class="pre">4),</span> <span class="pre">vec2(6,</span> <span class="pre">4),</span> <span class="pre">vec2(7,</span> <span class="pre">4),</span> <span class="pre">vec2(0,</span> <span class="pre">5),</span> <span class="pre">vec2(1,</span> <span class="pre">5),</span> <span class="pre">vec2(2,</span> <span class="pre">5),</span> <span class="pre">vec2(3,</span> <span class="pre">5),</span> <span class="pre">vec2(4,</span> <span class="pre">5),</span> <span class="pre">vec2(5,</span> <span class="pre">5),</span> <span class="pre">vec2(6,</span> <span class="pre">5),</span> <span class="pre">vec2(7,</span> <span class="pre">5),</span> <span class="pre">vec2(0,</span> <span class="pre">6),</span> <span class="pre">vec2(1,</span> <span class="pre">6),</span> <span class="pre">vec2(2,</span> <span class="pre">6),</span> <span class="pre">vec2(3,</span> <span class="pre">6),</span> <span class="pre">vec2(4,</span> <span class="pre">6),</span> <span class="pre">vec2(5,</span> <span class="pre">6),</span> <span class="pre">vec2(6,</span> <span class="pre">6),</span> <span class="pre">vec2(7,</span> <span class="pre">6),</span> <span class="pre">vec2(0,</span> <span class="pre">7),</span> <span class="pre">vec2(1,</span> <span class="pre">7),</span> <span class="pre">vec2(2,</span> <span class="pre">7),</span> <span class="pre">vec2(3,</span> <span class="pre">7),</span> <span class="pre">vec2(4,</span> <span class="pre">7),</span> <span class="pre">vec2(5,</span> <span class="pre">7),</span> <span class="pre">vec2(6,</span> <span class="pre">7),</span> <span class="pre">vec2(7,</span> <span class="pre">7)]</span></em><a class="headerlink" href="#checkers.Board.AllTiles" title="Permalink to this definition"></a></dt>
+<dd><p>Static list of all positions inside the board.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.IsInBoard">
+<span class="sig-name descname"><span class="pre">IsInBoard</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#checkers.Board.IsInBoard" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the given position is inside the board.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.IsTile">
+<span class="sig-name descname"><span class="pre">IsTile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#checkers.Board.IsTile" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the given position is a valid tile.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Board.Tiles">
+<span class="sig-name descname"><span class="pre">Tiles</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[vec2(1,</span> <span class="pre">0),</span> <span class="pre">vec2(3,</span> <span class="pre">0),</span> <span class="pre">vec2(5,</span> <span class="pre">0),</span> <span class="pre">vec2(7,</span> <span class="pre">0),</span> <span class="pre">vec2(0,</span> <span class="pre">1),</span> <span class="pre">vec2(2,</span> <span class="pre">1),</span> <span class="pre">vec2(4,</span> <span class="pre">1),</span> <span class="pre">vec2(6,</span> <span class="pre">1),</span> <span class="pre">vec2(1,</span> <span class="pre">2),</span> <span class="pre">vec2(3,</span> <span class="pre">2),</span> <span class="pre">vec2(5,</span> <span class="pre">2),</span> <span class="pre">vec2(7,</span> <span class="pre">2),</span> <span class="pre">vec2(0,</span> <span class="pre">3),</span> <span class="pre">vec2(2,</span> <span class="pre">3),</span> <span class="pre">vec2(4,</span> <span class="pre">3),</span> <span class="pre">vec2(6,</span> <span class="pre">3),</span> <span class="pre">vec2(1,</span> <span class="pre">4),</span> <span class="pre">vec2(3,</span> <span class="pre">4),</span> <span class="pre">vec2(5,</span> <span class="pre">4),</span> <span class="pre">vec2(7,</span> <span class="pre">4),</span> <span class="pre">vec2(0,</span> <span class="pre">5),</span> <span class="pre">vec2(2,</span> <span class="pre">5),</span> <span class="pre">vec2(4,</span> <span class="pre">5),</span> <span class="pre">vec2(6,</span> <span class="pre">5),</span> <span class="pre">vec2(1,</span> <span class="pre">6),</span> <span class="pre">vec2(3,</span> <span class="pre">6),</span> <span class="pre">vec2(5,</span> <span class="pre">6),</span> <span class="pre">vec2(7,</span> <span class="pre">6),</span> <span class="pre">vec2(0,</span> <span class="pre">7),</span> <span class="pre">vec2(2,</span> <span class="pre">7),</span> <span class="pre">vec2(4,</span> <span class="pre">7),</span> <span class="pre">vec2(6,</span> <span class="pre">7)]</span></em><a class="headerlink" href="#checkers.Board.Tiles" title="Permalink to this definition"></a></dt>
+<dd><p>Static list of all <em>valid</em> tiles on the board.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#checkers.Board" title="checkers.Board"><span class="pre">checkers.Board</span></a></span></span><a class="headerlink" href="#checkers.Board.copy" title="Permalink to this definition"></a></dt>
+<dd><p>Clone the board.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><span class="pre">checkers.Tile</span></a></span></span><a class="headerlink" href="#checkers.Board.get" title="Permalink to this definition"></a></dt>
+<dd><p>Return information about the tile at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The queried position.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The tile at the given position or <a class="reference internal" href="#checkers.Tile.NO_TILE" title="checkers.Tile.NO_TILE"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Tile.NO_TILE</span></code></a> if the position is invalid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tile</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.get_piece_moves">
+<span class="sig-name descname"><span class="pre">get_piece_moves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.Board.get_piece_moves" title="Permalink to this definition"></a></dt>
+<dd><p>Return an iterator of all possible moves for the piece at the given position.</p>
+<p>A piece can move one tile diagonally in its player’s direction. If the piece is a king, it can move in any direction.
+If there is an enemy piece on the tile and the space behind it is empty, the piece <em>jump over</em> the enemy piece and capture it.
+Capturing a piece means the piece is removed from the board.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position of the piece to get the moves for.</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a> – The target position of the move.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bool</span></code> – Whether the move is a capture.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If a player has at least one capturing move available, they have to make a capturing move. This method doesn’t handle that, see <a class="reference internal" href="#checkers.Game.generate_moves" title="checkers.Game.generate_moves"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Game.generate_moves()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.get_player_pieces">
+<span class="sig-name descname"><span class="pre">get_player_pieces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.Board.get_player_pieces" title="Permalink to this definition"></a></dt>
+<dd><p>Return an iterator of all pieces belonging to the given player.</p>
+<p>Loops over all tiles and yields the position of all tiles belonging to the given player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player</strong> (<a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>) – The player to get the pieces for.</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a> – The position of the piece.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.move">
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Board.move" title="Permalink to this definition"></a></dt>
+<dd><p>Move a piece, capturing an enemy piece if applicable.</p>
+<p>This method does not validate the move. If there is a tile between the two positions, the piece at that tile will be captured.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position of the piece to move.</p></li>
+<li><p><strong>pos2</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The target position of the move.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#checkers.Board.score" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluate the board configuration in favor of the given player.</p>
+<p>This is the scoring function used by the AI. The oponent’s score is subtracted from the player’s score.</p>
+<dl class="simple">
+<dt>Scoring principles:</dt><dd><ul class="simple">
+<li><p>The king piece is worth more than the normal pieces.</p></li>
+<li><p>Normal pieces get a bonus if they stick to the edges of the board.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player</strong> (<a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>) – The player to evaluate the board for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The score of the player.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Board.set">
+<span class="sig-name descname"><span class="pre">set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><span class="pre">checkers.Tile</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Board.set" title="Permalink to this definition"></a></dt>
+<dd><p>Set the tile at the given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position to set the tile at.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tile</span></code></a>) – The value to set the tile to.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>This method does not check if the position is valid.</p></li>
+<li><p>This method only uses the <code class="xref py py-attr docutils literal notranslate"><span class="pre">Tile._value</span></code> property, so any object that implements it can be used.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.ColorPalette">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">ColorPalette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.ColorPalette" title="Permalink to this definition"></a></dt>
+<dd><p>Used for coloring a player’s pieces.</p>
+<p>Primary light and dark should be a lighter/darker version of the primary color. Secondary should be a contrasting color to primary.</p>
+<p>May be initialized with an arbitrary amount of colors (up to 6).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>*params</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>, default <code class="docutils literal notranslate"><span class="pre">#000000</span></code>) – Hex strings in the format of <code class="docutils literal notranslate"><span class="pre">#RRGGBB</span></code>.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.primary">
+<span class="sig-name descname"><span class="pre">primary</span></span><a class="headerlink" href="#checkers.ColorPalette.primary" title="Permalink to this definition"></a></dt>
+<dd><p>Color of pieces which can move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.primary_light">
+<span class="sig-name descname"><span class="pre">primary_light</span></span><a class="headerlink" href="#checkers.ColorPalette.primary_light" title="Permalink to this definition"></a></dt>
+<dd><p>Color of the currently selected piece.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.primary_dark">
+<span class="sig-name descname"><span class="pre">primary_dark</span></span><a class="headerlink" href="#checkers.ColorPalette.primary_dark" title="Permalink to this definition"></a></dt>
+<dd><p>Color of pieces which cannot move.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.secondary">
+<span class="sig-name descname"><span class="pre">secondary</span></span><a class="headerlink" href="#checkers.ColorPalette.secondary" title="Permalink to this definition"></a></dt>
+<dd><p>Color of possible move indicators.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.secondary_light">
+<span class="sig-name descname"><span class="pre">secondary_light</span></span><a class="headerlink" href="#checkers.ColorPalette.secondary_light" title="Permalink to this definition"></a></dt>
+<dd><p>Unused.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.ColorPalette.secondary_dark">
+<span class="sig-name descname"><span class="pre">secondary_dark</span></span><a class="headerlink" href="#checkers.ColorPalette.secondary_dark" title="Permalink to this definition"></a></dt>
+<dd><p>Unused.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Color</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>Secondary light and dark variants are currently unused and don’t have to be set.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Drawer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Drawer</span></span><a class="headerlink" href="#checkers.Drawer" title="Permalink to this definition"></a></dt>
+<dd><p>Handles rendering of the game.</p>
+<p>Uses <a class="reference external" href="https://pygame.org/">pygame</a> for cross-platform rendering.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.screen">
+<span class="sig-name descname"><span class="pre">screen</span></span><a class="headerlink" href="#checkers.Drawer.screen" title="Permalink to this definition"></a></dt>
+<dd><p>A surface representing the game window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.Surface</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.font">
+<span class="sig-name descname"><span class="pre">font</span></span><a class="headerlink" href="#checkers.Drawer.font" title="Permalink to this definition"></a></dt>
+<dd><p>The default font used for rendering text.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.font.Font</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.font_debug">
+<span class="sig-name descname"><span class="pre">font_debug</span></span><a class="headerlink" href="#checkers.Drawer.font_debug" title="Permalink to this definition"></a></dt>
+<dd><p>A smaller mono-spaced font used for debugging.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.font.Font</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.animation">
+<span class="sig-name descname"><span class="pre">animation</span></span><a class="headerlink" href="#checkers.Drawer.animation" title="Permalink to this definition"></a></dt>
+<dd><p>The current animation being played.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.PieceAnimation" title="checkers.PieceAnimation"><code class="xref py py-class docutils literal notranslate"><span class="pre">PieceAnimation</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.AnimationDuration">
+<span class="sig-name descname"><span class="pre">AnimationDuration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></em><a class="headerlink" href="#checkers.Drawer.AnimationDuration" title="Permalink to this definition"></a></dt>
+<dd><p>The duration of animations in milliseconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.FontSize">
+<span class="sig-name descname"><span class="pre">FontSize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#checkers.Drawer.FontSize" title="Permalink to this definition"></a></dt>
+<dd><p>The default font size.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Drawer.Framerate">
+<span class="sig-name descname"><span class="pre">Framerate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">60</span></em><a class="headerlink" href="#checkers.Drawer.Framerate" title="Permalink to this definition"></a></dt>
+<dd><p>The maximum refresh rate of the game.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.animate">
+<span class="sig-name descname"><span class="pre">animate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.animate" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up an animation to move a piece from one position to another.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="checkers.Drawer.animating">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">animating</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#checkers.Drawer.animating" title="Permalink to this definition"></a></dt>
+<dd><p>Whether or not an animation is currently playing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Game" title="checkers.Game"><span class="pre">checkers.Game</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the game to the screen.</p>
+<ol class="arabic simple">
+<li><p>Clears the screen and draws the board.</p></li>
+<li><p>Draws the pieces.</p></li>
+<li><p>If <a class="reference internal" href="env.html#env.DEBUG" title="env.DEBUG"><code class="xref py py-data docutils literal notranslate"><span class="pre">env.DEBUG</span></code></a> is set draws extra debugging information.</p></li>
+<li><p>If the game is over, draws the victory message.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<a class="reference internal" href="#checkers.Game" title="checkers.Game"><code class="xref py py-class docutils literal notranslate"><span class="pre">Game</span></code></a>) – The game object to draw information from.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Drawer.draw_debug" title="checkers.Drawer.draw_debug"><code class="xref py py-meth docutils literal notranslate"><span class="pre">draw_debug()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.draw_debug">
+<span class="sig-name descname"><span class="pre">draw_debug</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Game" title="checkers.Game"><span class="pre">checkers.Game</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.draw_debug" title="Permalink to this definition"></a></dt>
+<dd><p>Draws extra debug information to the screen.</p>
+<p>Labels each tile with its position. In the top-left corner it displays
+* The current player’s turn
+* The position of the selected piece, if any
+* The AI’s score, as of its last turn
+* How long the AI’s last computation took
+* The depth to which the AI last searched</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>game</strong> (<a class="reference internal" href="#checkers.Game" title="checkers.Game"><code class="xref py py-class docutils literal notranslate"><span class="pre">Game</span></code></a>) – The game object to draw information from.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.draw_piece">
+<span class="sig-name descname"><span class="pre">draw_piece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">game</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Game" title="checkers.Game"><span class="pre">checkers.Game</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.draw_piece" title="Permalink to this definition"></a></dt>
+<dd><p>Draws a piece to the screen.</p>
+<p>Handles animations and different piece states and types.</p>
+<ul class="simple">
+<li><p>If the piece is being animated, interpolates between the origin and destination positions in regards to the animations progress.</p></li>
+<li><p>If the piece cannot currently be moved it is drawn in a darker color.</p></li>
+<li><p>If the piece is currently selected, it is drawn offset, in a lighter color, with a shadow under it and its possible moves are drawn in a contrasting color.</p></li>
+<li><p>Otherwise if a piece can be moved but is not currently selected, it is drawn using the default color.</p></li>
+</ul>
+<p>A normal piece is drawn as a circle, while a king piece is drawn as a square with rounded corners.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position of the piece to draw.</p></li>
+<li><p><strong>game</strong> (<a class="reference internal" href="#checkers.Game" title="checkers.Game"><code class="xref py py-class docutils literal notranslate"><span class="pre">Game</span></code></a>) – The game object to draw information from.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.ColorPalette" title="checkers.ColorPalette"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorPalette</span></code></a>, <a class="reference internal" href="#checkers.Player.colors" title="checkers.Player.colors"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Player.colors</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.draw_tile">
+<span class="sig-name descname"><span class="pre">draw_tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.draw_tile" title="Permalink to this definition"></a></dt>
+<dd><p>Draws a board tile to the screen.</p>
+<p>A tile is represented as a white square.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position of the tile to draw.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.draw_victory">
+<span class="sig-name descname"><span class="pre">draw_victory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.draw_victory" title="Permalink to this definition"></a></dt>
+<dd><p>Draws the victory message to the screen.</p>
+<p>Prints “Game Over! &lt;player&gt; wins!” in large letters to the center of the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>player</strong> (<a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a>) – The player who won the game, used to determine the color of the text and congratulations message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.save_screenshot">
+<span class="sig-name descname"><span class="pre">save_screenshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.save_screenshot" title="Permalink to this definition"></a></dt>
+<dd><p>Saves a screenshot of the game as <code class="docutils literal notranslate"><span class="pre">name.png</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Drawer.setup_window">
+<span class="sig-name descname"><span class="pre">setup_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Drawer.setup_window" title="Permalink to this definition"></a></dt>
+<dd><p>Creates the game window and loads fonts.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Game">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><a class="headerlink" href="#checkers.Game" title="Permalink to this definition"></a></dt>
+<dd><p>Takes care of game logic.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.board">
+<span class="sig-name descname"><span class="pre">board</span></span><a class="headerlink" href="#checkers.Game.board" title="Permalink to this definition"></a></dt>
+<dd><p>Handles the board layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.Board" title="checkers.Board"><code class="xref py py-class docutils literal notranslate"><span class="pre">Board</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.clock">
+<span class="sig-name descname"><span class="pre">clock</span></span><a class="headerlink" href="#checkers.Game.clock" title="Permalink to this definition"></a></dt>
+<dd><p>Used to control the framerate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">pygame.time.Clock</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.drawer">
+<span class="sig-name descname"><span class="pre">drawer</span></span><a class="headerlink" href="#checkers.Game.drawer" title="Permalink to this definition"></a></dt>
+<dd><p>Renders the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.Drawer" title="checkers.Drawer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Drawer</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.refresh">
+<span class="sig-name descname"><span class="pre">refresh</span></span><a class="headerlink" href="#checkers.Game.refresh" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the game should be redrawn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.victor">
+<span class="sig-name descname"><span class="pre">victor</span></span><a class="headerlink" href="#checkers.Game.victor" title="Permalink to this definition"></a></dt>
+<dd><p>The player that won the game, once the game is over or None if the game is still ongoing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Optional[Player]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.active_player">
+<span class="sig-name descname"><span class="pre">active_player</span></span><a class="headerlink" href="#checkers.Game.active_player" title="Permalink to this definition"></a></dt>
+<dd><p>The player whose turn it is.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.selected_piece">
+<span class="sig-name descname"><span class="pre">selected_piece</span></span><a class="headerlink" href="#checkers.Game.selected_piece" title="Permalink to this definition"></a></dt>
+<dd><p>The position of the piece that is currently selected (only applies to human players).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Optional[vec2]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.locked_piece">
+<span class="sig-name descname"><span class="pre">locked_piece</span></span><a class="headerlink" href="#checkers.Game.locked_piece" title="Permalink to this definition"></a></dt>
+<dd><p>If a <em>multi-jump</em> is in progress, this is the position of the piece that is currently locked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Optional[vec2]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.moves">
+<span class="sig-name descname"><span class="pre">moves</span></span><a class="headerlink" href="#checkers.Game.moves" title="Permalink to this definition"></a></dt>
+<dd><p>A dictionary of all possible moves for each piece.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">defaultdict[vec2,</span> <span class="pre">list[vec2]]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Game.computer_data">
+<span class="sig-name descname"><span class="pre">computer_data</span></span><a class="headerlink" href="#checkers.Game.computer_data" title="Permalink to this definition"></a></dt>
+<dd><p>Results of the last AI computation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="computer.html#computer.ComputerData" title="computer.ComputerData"><code class="xref py py-class docutils literal notranslate"><span class="pre">ComputerData</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.check_win">
+<span class="sig-name descname"><span class="pre">check_win</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.check_win" title="Permalink to this definition"></a></dt>
+<dd><p>Check if the game is over.</p>
+<p>If the current player doesn’t have any pieces left or all their pieces are unable to move, the player loses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Render the game if <a class="reference internal" href="#checkers.Game.refresh" title="checkers.Game.refresh"><code class="xref py py-attr docutils literal notranslate"><span class="pre">refresh</span></code></a> is <code class="docutils literal notranslate"><span class="pre">True</span></code> or an animation is running <a class="reference internal" href="#checkers.Drawer.animating" title="checkers.Drawer.animating"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Drawer.animating</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.generate_moves">
+<span class="sig-name descname"><span class="pre">generate_moves</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.generate_moves" title="Permalink to this definition"></a></dt>
+<dd><p>Generate all possible moves for the current player.</p>
+<p>Loops over all pieces belonging to the current player and generates all possible moves for each piece.
+If at least one of the moves is a capturing move, only capturing moves are kept.</p>
+<p class="rubric">Notes</p>
+<p>This method is called whenever a piece is moved or it becomes the other player’s turn.
+The result isn’t returned, but stored in <a class="reference internal" href="#checkers.Game.moves" title="checkers.Game.moves"><code class="xref py py-attr docutils literal notranslate"><span class="pre">moves</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.get_moves">
+<span class="sig-name descname"><span class="pre">get_moves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.Game.get_moves" title="Permalink to this definition"></a></dt>
+<dd><p>Get all possible moves for a piece.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.handle_click">
+<span class="sig-name descname"><span class="pre">handle_click</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">click</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pygame.math.Vector2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.handle_click" title="Permalink to this definition"></a></dt>
+<dd><p>Handle a click by a human player.</p>
+<dl class="simple">
+<dt>Finds the tile that was clicked and does the following:</dt><dd><ul class="simple">
+<li><p>If a piece is already selected and the tile is a valid move, move the piece.</p></li>
+<li><p>If the tile contains a piece the player can move, select it.</p></li>
+<li><p>Otherwise deselect the currently selected piece.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>click</strong> (<code class="docutils literal notranslate"><span class="pre">pygame.math.Vector2</span></code>) – The position of the click.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.move_piece">
+<span class="sig-name descname"><span class="pre">move_piece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.move_piece" title="Permalink to this definition"></a></dt>
+<dd><p>Move a piece, with game logic.</p>
+<dl class="simple">
+<dt>On top of calling <a class="reference internal" href="#checkers.Board.move" title="checkers.Board.move"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Board.move()</span></code></a> does the following:</dt><dd><ul class="simple">
+<li><p>Begins an animation of the move.</p></li>
+<li><p>If the piece reaches the other side and is not a king, it becomes a king and the turn ends immediately.</p></li>
+<li><p>Otherwise if a capturing move is made, the piece is locked.</p></li>
+<li><p>New moves are generated.</p></li>
+<li><p>If the player cannot make any more captures with this piece, the turn ends.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pos</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The position of the piece to move.</p></li>
+<li><p><strong>pos2</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The target position of the move.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Board.move" title="checkers.Board.move"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Board.move()</span></code></a>, <a class="reference internal" href="#checkers.Drawer.animate" title="checkers.Drawer.animate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Drawer.animate()</span></code></a>, <a class="reference internal" href="#checkers.Game.generate_moves" title="checkers.Game.generate_moves"><code class="xref py py-meth docutils literal notranslate"><span class="pre">generate_moves()</span></code></a>, <a class="reference internal" href="#checkers.Game.next_turn" title="checkers.Game.next_turn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">next_turn()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.next_turn">
+<span class="sig-name descname"><span class="pre">next_turn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.next_turn" title="Permalink to this definition"></a></dt>
+<dd><p>End the current player’s turn and begin the next player’s turn.</p>
+<p>Resets the locked piece and selected piece. Checks if the game is over.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Game.check_win" title="checkers.Game.check_win"><code class="xref py py-meth docutils literal notranslate"><span class="pre">check_win()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Game.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#checkers.Game.update" title="Permalink to this definition"></a></dt>
+<dd><p>Processes user and computer input.</p>
+<p>Does nothing if the game is over.
+If the current player is the user, forwards mouse clicks to <a class="reference internal" href="#checkers.Game.handle_click" title="checkers.Game.handle_click"><code class="xref py py-meth docutils literal notranslate"><span class="pre">handle_click()</span></code></a>.
+If it’s the computer’s turn, queries the computer for a move.</p>
+<dl class="simple">
+<dt>There are some available keyboard shortcuts:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">q</span></code>: Quit the game.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">space</span></code>: Save a screenshot of the game as <code class="docutils literal notranslate"><span class="pre">screenshot.png</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This function also handles sleeping in accordance to <a class="reference internal" href="#checkers.Drawer.Framerate" title="checkers.Drawer.Framerate"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Drawer.Framerate</span></code></a>, as to not overload the CPU.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Game.draw" title="checkers.Game.draw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">draw()</span></code></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Piece">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Piece</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Piece" title="Permalink to this definition"></a></dt>
+<dd><p>A piece on a tile.</p>
+<p>Should be treated as <strong>immutable</strong>. Initialize a Piece from its character representation.</p>
+<dl class="simple">
+<dt>Possible characters are:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Player 1’s piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Player 2’s piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: Player 1’s king piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: Player 2’s king piece</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>c</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The character representation of the piece.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the character representation is invalid.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Piece.player">
+<span class="sig-name descname"><span class="pre">player</span></span><a class="headerlink" href="#checkers.Piece.player" title="Permalink to this definition"></a></dt>
+<dd><p>The player owning the piece.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Piece.king">
+<span class="sig-name descname"><span class="pre">king</span></span><a class="headerlink" href="#checkers.Piece.king" title="Permalink to this definition"></a></dt>
+<dd><p>Whether the piece is a king.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tile</span></code></a>, <a class="reference internal" href="#checkers.Player" title="checkers.Player"><code class="xref py py-class docutils literal notranslate"><span class="pre">Player</span></code></a></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Piece.Size">
+<span class="sig-name descname"><span class="pre">Size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">45.0</span></em><a class="headerlink" href="#checkers.Piece.Size" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.PieceAnimation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">PieceAnimation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destination</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.PieceAnimation" title="Permalink to this definition"></a></dt>
+<dd><p>Holds state about the currently animated piece.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.PieceAnimation.destination">
+<span class="sig-name descname"><span class="pre">destination</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#checkers.PieceAnimation.destination" title="Permalink to this definition"></a></dt>
+<dd><p>The position of the piece after the animation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.PieceAnimation.origin">
+<span class="sig-name descname"><span class="pre">origin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#checkers.PieceAnimation.origin" title="Permalink to this definition"></a></dt>
+<dd><p>The position of the piece before the animation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.PieceAnimation.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#checkers.PieceAnimation.progress" title="Permalink to this definition"></a></dt>
+<dd><p>A value from 0 to 1, representing the progress of the animation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Player">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_palette</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.ColorPalette" title="checkers.ColorPalette"><span class="pre">checkers.ColorPalette</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Player" title="Permalink to this definition"></a></dt>
+<dd><p>A player owning a piece.</p>
+<p>Should be treated as <strong>immutable</strong>. Holds a color palette its pieces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color_palette</strong> (<a class="reference internal" href="#checkers.ColorPalette" title="checkers.ColorPalette"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorPalette</span></code></a>) – The color palette of the player.</p></li>
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The name of the player.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Player.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><a class="headerlink" href="#checkers.Player.colors" title="Permalink to this definition"></a></dt>
+<dd><p>The color palette of the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#checkers.ColorPalette" title="checkers.ColorPalette"><code class="xref py py-class docutils literal notranslate"><span class="pre">ColorPalette</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Player.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#checkers.Player.name" title="Permalink to this definition"></a></dt>
+<dd><p>The name of the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Piece" title="checkers.Piece"><code class="xref py py-class docutils literal notranslate"><span class="pre">Piece</span></code></a></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Player.ONE">
+<span class="sig-name descname"><span class="pre">ONE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;checkers.Player</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#checkers.Player.ONE" title="Permalink to this definition"></a></dt>
+<dd><p>Static instance of the first player.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Player.Players">
+<span class="sig-name descname"><span class="pre">Players</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">[&lt;checkers.Player</span> <span class="pre">object&gt;,</span> <span class="pre">&lt;checkers.Player</span> <span class="pre">object&gt;]</span></em><a class="headerlink" href="#checkers.Player.Players" title="Permalink to this definition"></a></dt>
+<dd><p>Static list of all players.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Player.TWO">
+<span class="sig-name descname"><span class="pre">TWO</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;checkers.Player</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#checkers.Player.TWO" title="Permalink to this definition"></a></dt>
+<dd><p>Static instance of the second player.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Player.other">
+<span class="sig-name descname"><span class="pre">other</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#checkers.Player" title="checkers.Player"><span class="pre">checkers.Player</span></a></span></span><a class="headerlink" href="#checkers.Player.other" title="Permalink to this definition"></a></dt>
+<dd><p>Return the other player.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.Tile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">Tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.Tile" title="Permalink to this definition"></a></dt>
+<dd><p>A tile on the board.</p>
+<p>Should be treated as <strong>immutable</strong>. Initialize a Tile from its character representation.</p>
+<dl class="simple">
+<dt>Possible characters are:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">[space]</span></code>: No tile</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code>: Empty tile</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code>: Player 1’s piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code>: Player 2’s piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: Player 1’s king piece</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">b</span></code>: Player 2’s king piece</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>c</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The character representation of the tile.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>AssertionError</strong> – If the character representation is invalid.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Tile.piece">
+<span class="sig-name descname"><span class="pre">piece</span></span><a class="headerlink" href="#checkers.Tile.piece" title="Permalink to this definition"></a></dt>
+<dd><p>The piece on the tile, or None if there is no piece.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Optional[Piece]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#checkers.Piece" title="checkers.Piece"><code class="xref py py-class docutils literal notranslate"><span class="pre">Piece</span></code></a></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Tile.Count">
+<span class="sig-name descname"><span class="pre">Count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#checkers.Tile.Count" title="Permalink to this definition"></a></dt>
+<dd><p>Board width and height in tiles.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Tile.EMPTY">
+<span class="sig-name descname"><span class="pre">EMPTY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><span class="pre">checkers.Tile</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;checkers.Tile</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#checkers.Tile.EMPTY" title="Permalink to this definition"></a></dt>
+<dd><p>Static instance of empty tile.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Tile.NO_TILE">
+<span class="sig-name descname"><span class="pre">NO_TILE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#checkers.Tile" title="checkers.Tile"><span class="pre">checkers.Tile</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;checkers.Tile</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#checkers.Tile.NO_TILE" title="Permalink to this definition"></a></dt>
+<dd><p>Static instance of invalid tile position.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.Tile.Size">
+<span class="sig-name descname"><span class="pre">Size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">100</span></em><a class="headerlink" href="#checkers.Tile.Size" title="Permalink to this definition"></a></dt>
+<dd><p>Tile size in pixels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.Tile.empty">
+<span class="sig-name descname"><span class="pre">empty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#checkers.Tile.empty" title="Permalink to this definition"></a></dt>
+<dd><p>Return whether the tile is empty.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="checkers.vec2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">vec2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#checkers.vec2" title="Permalink to this definition"></a></dt>
+<dd><p>A 2D vector used for to represent a position on the board.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The x-coordinate of the vector.</p></li>
+<li><p><strong>y</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – The y-coordinate of the vector.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.vec2.x">
+<span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#checkers.vec2.x" title="Permalink to this definition"></a></dt>
+<dd><p>The x-coordinate of the vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="checkers.vec2.y">
+<span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#checkers.vec2.y" title="Permalink to this definition"></a></dt>
+<dd><p>The y-coordinate of the vector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.vec2.center">
+<span class="sig-name descname"><span class="pre">center</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.vec2.center" title="Permalink to this definition"></a></dt>
+<dd><p>Return the center of two vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The other vector.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The center of the two vectors, or None if the center doesn’t fall on an integer grid.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">Optional[vec2]</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="checkers.vec2.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#checkers.vec2.distance" title="Permalink to this definition"></a></dt>
+<dd><p>Return the Manhattan distance between two vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>other</strong> (<a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a>) – The other vector.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The distance between the two vectors.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="checkers.vectorize">
+<span class="sig-prename descclassname"><span class="pre">checkers.</span></span><span class="sig-name descname"><span class="pre">vectorize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><span class="pre">checkers.vec2</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#checkers.vectorize" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a generator of tuples to a generator of vectors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>generator</strong> (<code class="docutils literal notranslate"><span class="pre">Iterator[tuple[int,</span> <span class="pre">int]]</span></code>) – The generator to convert.</p>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><p><a class="reference internal" href="#checkers.vec2" title="checkers.vec2"><code class="xref py py-class docutils literal notranslate"><span class="pre">vec2</span></code></a> – The converted generator.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Welcome to Checkers’ documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="computer.html" class="btn btn-neutral float-right" title="Computer AI" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Adam Švestka.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
