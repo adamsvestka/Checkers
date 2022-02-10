@@ -5,17 +5,17 @@ Welcome to Checkers' documentation!
    :maxdepth: 4
    :caption: Introduction
 
-   install
-   rules
+   source/install
+   source/rules
 
 
 .. toctree::
    :maxdepth: 4
    :caption: Code
 
-   checkers
-   computer
-   env
+   source/checkers
+   source/computer
+   source/env
 
 Indices and tables
 ==================

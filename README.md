@@ -1,8 +1,8 @@
-# Installation
-
 [![Python application](https://github.com/adamsvestka/Checkers/actions/workflows/python-app.yml/badge.svg)](https://github.com/adamsvestka/Checkers/actions/workflows/python-app.yml)
 [![Documentation Status](https://readthedocs.org/projects/adamsvestka-checkers/badge/?version=latest)](https://adamsvestka-checkers.readthedocs.io/en/latest/?badge=latest)
 
+
+## Installation
 
 Make sure you have a relatively new version of python3 installed (tested with version `3.9.10`).
 
