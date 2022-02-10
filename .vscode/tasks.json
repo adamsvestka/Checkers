@@ -15,7 +15,7 @@
         {
             "label": "Sphynx: build docs from scratch",
             "type": "shell",
-            "command": "rm -r _build/*; make html",
+            "command": "rm -r build/*; make html",
             "options": {
                 "cwd": "${workspaceFolder}/docs",
             },
@@ -24,7 +24,7 @@
         {
             "label": "Python: serve docs",
             "type": "shell",
-            "command": "python3 -m http.server -d _build/html 3000",
+            "command": "python3 -m http.server -d build/html 3000",
             "options": {
                 "cwd": "${workspaceFolder}/docs",
             },

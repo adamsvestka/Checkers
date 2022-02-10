@@ -2,7 +2,7 @@
 [![Documentation Status](https://readthedocs.org/projects/adamsvestka-checkers/badge/?version=latest)](https://adamsvestka-checkers.readthedocs.io/en/latest/?badge=latest)
 
 
-## Installation
+# Installation
 
 Make sure you have a relatively new version of python3 installed (tested with version `3.9.10`).
 
@@ -17,7 +17,7 @@ python3 main.py
 ```
 
 
-## Build the docs
+# Build the docs
 
 To build the documentation you will need to install extra dependencies.
 
