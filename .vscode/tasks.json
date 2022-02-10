@@ -6,6 +6,15 @@
         {
             "label": "Sphynx: build docs",
             "type": "shell",
+            "command": "make html",
+            "options": {
+                "cwd": "${workspaceFolder}/docs",
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Sphynx: build docs from scratch",
+            "type": "shell",
             "command": "rm -r _build/*; make html",
             "options": {
                 "cwd": "${workspaceFolder}/docs",

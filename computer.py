@@ -240,8 +240,9 @@ def run(board: Board, player: Player) -> ComputerData:
     elapsed = (time.time() - start) * 1000
     samples.append((depth, elapsed))
     def func(x, a): return a ** x
-    (factor,), _ = curve_fit(func, *zip(*samples[-5:]))
-    depth = max(MINIMUM_DEPTH, int(math.log(TARGET_TIME, factor)))
+    if len(samples) > 1:
+        (factor,), _ = curve_fit(func, *zip(*samples[-5:]))
+        depth = max(MINIMUM_DEPTH, int(math.log(TARGET_TIME, factor)))
 
     if DEBUG >= 1:
         print(f"{cached} cached / {len(cache)} new - {elapsed * 1000:.2f}ms, best {score}")

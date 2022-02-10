@@ -256,7 +256,7 @@ class Piece:
     :class:`Tile`
     :class:`Player`
     """
-    Size: int = Tile.Size * 0.45
+    Size: int = int(Tile.Size * 0.45)
 
     def __init__(self, c: str):
         assert c in "12ab"
@@ -268,7 +268,7 @@ class Piece:
 class Player:
     """A player owning a piece.
 
-    Should be treated as **immutable**. Holds a color palette its pieces.
+    Should be treated as **immutable**. Holds a color palette for its pieces.
 
     Parameters
     ----------
@@ -811,7 +811,10 @@ class Drawer:
 
         See Also
         --------
+        :meth:`draw_tile`
+        :meth:`draw_piece`
         :meth:`draw_debug`
+        :meth:`draw_victory`
         """
         self.screen.fill(COLOR_BLACK)
 
@@ -944,17 +947,22 @@ class Drawer:
     def draw_debug(self, game: Game) -> None:
         """Draws extra debug information to the screen.
 
-        Labels each tile with its position. In the top-left corner it displays
-        * The current player's turn
-        * The position of the selected piece, if any
-        * The AI's score, as of its last turn
-        * How long the AI's last computation took
-        * The depth to which the AI last searched
+        Labels each tile with its position. In the top-left corner it displays:
+
+        * The current player's turn.
+        * The position of the selected piece, if any.
+        * The AI's score, as of its last turn.
+        * How long the AI's last computation took.
+        * The depth to which the AI last searched.
 
         Parameters
         ----------
         game : :class:`Game`
             The game object to draw information from.
+
+        See Also
+        --------
+        :class:`env.DEBUG`
         """
         for tile in Board.Tiles:
             surface = self.font_debug.render(f"{tile.x},{tile.y}", True, COLOR_BLACK)
