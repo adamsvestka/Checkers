@@ -1,2 +1,5 @@
-.. include:: ../README.md
+Installation
+============
+
+.. include:: ../../README.md
     :parser: myst_parser.docutils_
