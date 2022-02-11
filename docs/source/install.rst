@@ -1,5 +1,5 @@
 Introduction
 ============
 
-.. include:: ../../README.md
-    :parser: myst_parser.docutils_
+.. include:: readme.md
+    :parser:  myst_parser.docutils_

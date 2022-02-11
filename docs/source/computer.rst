@@ -1,6 +1,9 @@
 Computer AI
 ===========
 
+This module contains the decision algorithms for the computer player.
+The AI uses an **alpha-beta pruning minimax** algorithm to loop over all possibilities to a certain depth and determine the best move.
+
 
 ComputerData
 ------------

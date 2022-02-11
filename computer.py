@@ -109,8 +109,8 @@ def minimax(board: Board, player: Player, depth: int = 7, maximizing: bool = Tru
     """The main decision function of the AI.
 
     An alpha-beta pruning minimax algorithm is used to iterate over all possible board states, to a certain depth.
-    When it reaches the max depth or a game end the board state is scored and returned.
-    Caches scores for end board states to speed up the algorithm.
+    When it reaches the max depth or a game end the board state is heuristically evaluated.
+    Caches scores for ending board states to speed up the algorithm.
 
     Parameters
     ----------
@@ -119,7 +119,7 @@ def minimax(board: Board, player: Player, depth: int = 7, maximizing: bool = Tru
     player : :class:`~checkers.Player`
         The computer player.
     depth : ``int``, default ``7``
-        The depth to search to.
+        The remaining depth to search to.
     maximizing : ``bool``, default ``True``
         Whether the current iteration's player is trying to maximize or minimize the score.
     alpha : ``float``, default ``-float('inf')``
@@ -130,9 +130,9 @@ def minimax(board: Board, player: Player, depth: int = 7, maximizing: bool = Tru
     Returns
     -------
     ``float``
-        The best score for the current player.
+        The best attainable score for the current player.
     ``list[vec2]``
-        A sequence of moves towards the best score.
+        The last move made (in reverse) -- aka the move to make, to get to this score.
 
     See Also
     --------
@@ -183,11 +183,11 @@ samples = []
 
 @dataclass
 class ComputerData:
-    """Holds the AI's resulting data."""
+    """Holds the result of the AI's computation."""
     compound_move: list[tuple[vec2, vec2]]
-    """The sequence of moves the AI made."""
+    """The move (or sequence of capturing moves) the AI has determined to make."""
     achievable_score: int
-    """The best score found using the minimax algorithm."""
+    """The best score the AI believes it can achieve in relation to its search depth."""
     compute_time: int
     """The time it took to compute the result."""
     search_depth: int
@@ -195,7 +195,7 @@ class ComputerData:
 
 
 def run(board: Board, player: Player) -> ComputerData:
-    """The AI's interface.
+    """The AI's entry point function.
 
     Runs the minimax algorithm and returns the result.
 
@@ -208,14 +208,14 @@ def run(board: Board, player: Player) -> ComputerData:
     Parameters
     ----------
     board : :class:`~checkers.Board`
-        The board to run the AI on.
+        The board to use as a starting point.
     player : :class:`~checkers.Player`
         The player to run the AI as.
 
     Returns
     -------
     :class:`ComputerData`
-        The resulting data.
+        The result of the AI's computatio.
 
     See Also
     --------

@@ -168,7 +168,7 @@ def vectorize(generator: Iterator[tuple[int, int]]) -> Iterator[vec2]:
 
 
 class Tile:
-    """A tile on the board.
+    """A tile on the board, doesn't have to be a valid position, may have a piece on it.
 
     Should be treated as **immutable**. Initialize a Tile from its character representation.
 
@@ -215,7 +215,7 @@ class Tile:
         self.piece = Piece(c) if c not in " ." else None
 
     def empty(self) -> bool:
-        """Return whether the tile is empty."""
+        """Return whether the tile doesn't have a piece on it. If the tile isn't valid returns True."""
         return self.piece is None and self is not Tile.NO_TILE
 
 
@@ -224,7 +224,7 @@ Tile.EMPTY = Tile(".")
 
 
 class Piece:
-    """A piece on a tile.
+    """A piece on the board, movable by it's owner.
 
     Should be treated as **immutable**. Initialize a Piece from its character representation.
 
@@ -247,9 +247,9 @@ class Piece:
     Attributes
     ----------
     player : :class:`Player`
-        The player owning the piece.
+        The player who owns the piece.
     king : ``bool``
-        Whether the piece is a king.
+        Whether the piece is a king or a normal piece.
 
     See Also
     --------
@@ -266,9 +266,10 @@ class Piece:
 
 
 class Player:
-    """A player owning a piece.
+    """One of the two players in the game.
 
-    Should be treated as **immutable**. Holds a color palette for its pieces.
+    Should be treated as **immutable**. There is a static instance for each player, which acts as a enumeration.
+    Each instance holds a color palette for its pieces.
 
     Parameters
     ----------
@@ -280,18 +281,18 @@ class Player:
     Attributes
     ----------
     colors : :class:`ColorPalette`
-        The color palette of the player.
+        Defines the drawing color of the player's pieces.
     name : ``str``
-        The name of the player.
+        Used to congratulate the player in the victory screen.
 
     See Also
     --------
     :class:`Piece`
     """
     ONE: Player
-    """ Static instance of the first player."""
+    """Static instance of the first player, the human player."""
     TWO: Player
-    """Static instance of the second player."""
+    """Static instance of the second player, the computer player."""
 
     Players: list[Player]
     """Static list of all players."""
@@ -301,7 +302,7 @@ class Player:
         self.name = name
 
     def other(self) -> Player:
-        """Return the other player."""
+        """Returns a reference to the other player."""
         return Player.Players[1 - Player.Players.index(self)]
 
 
@@ -314,7 +315,7 @@ Player.Players = [Player.ONE, Player.TWO]
 
 
 class Board:
-    """Manages the game board.
+    """Manages the game board state.
 
     Create a new board with the default configuration or from a string.
 
@@ -346,7 +347,7 @@ class Board:
     AllTiles: list[vec2] = list(vec2(x, y) for y in range(Tile.Count) for x in range(Tile.Count))
     """Static list of all positions inside the board."""
     Tiles: list[vec2] = list(vec for vec in AllTiles if (vec.x + vec.y) % 2)
-    """Static list of all *valid* tiles on the board."""
+    """Static list of all *valid* tiles on the board, used for fast iteration over all tiles."""
 
     def __init__(self, string: Optional[str] = None):
         if string:
@@ -363,7 +364,7 @@ class Board:
                 self.set(pos, Tile("1"))
 
     def copy(self) -> Board:
-        """Clone the board."""
+        """Clone the board, used for the AI's branching algorithm."""
         return Board(self.grid)
 
     def score(self, player: Player) -> int:
@@ -372,7 +373,9 @@ class Board:
         This is the scoring function used by the AI. The oponent's score is subtracted from the player's score.
 
         Scoring principles:
-            - The king piece is worth more than the normal pieces.
+
+            - Score is proportional to the number of the player's pieces.
+            - King pieces are worth more than normal pieces.
             - Normal pieces get a bonus if they stick to the edges of the board.
 
         Parameters
@@ -471,7 +474,7 @@ class Board:
     def get_player_pieces(self, player: Player) -> Iterator[vec2]:
         """Return an iterator of all pieces belonging to the given player.
 
-        Loops over all tiles and yields the position of all tiles belonging to the given player.
+        Loops over all tiles and yields positions of tiles belonging to the given player.
 
         Parameters
         ----------
@@ -538,18 +541,21 @@ class Board:
 
 
 class Game:
-    """Takes care of game logic.
+    """Takes care of game logic and user input.
+
+    For example, makes sure players make capturing moves if they have any available, handles piece movement,
+    checks for victory clauses, handles user piece selection and movement, etc.
 
     Attributes
     ----------
     board : :class:`Board`
-        Handles the board layout.
+        Stores the board layout.
     clock : ``pygame.time.Clock``
         Used to control the framerate.
     drawer : :class:`Drawer`
-        Renders the game.
+        Rendering abstraction class.
     refresh : ``bool``
-        Whether the game should be redrawn.
+        Whether the game should be redrawn, is used to limit redrawing if nothing changed.
     victor : ``Optional[Player]``
         The player that won the game, once the game is over or None if the game is still ongoing.
     active_player : :class:`Player`
@@ -559,9 +565,9 @@ class Game:
     locked_piece : ``Optional[vec2]``
         If a *multi-jump* is in progress, this is the position of the piece that is currently locked.
     moves : ``defaultdict[vec2, list[vec2]]``
-        A dictionary of all possible moves for each piece.
+        A dictionary of all possible moves from each piece's position.
     computer_data : :class:`~computer.ComputerData`
-        Results of the last AI computation.        
+        Results of the last AI computation.
     """
 
     def __init__(self):
@@ -592,6 +598,7 @@ class Game:
         """Handle a click by a human player.
 
         Finds the tile that was clicked and does the following:
+
             - If a piece is already selected and the tile is a valid move, move the piece.
             - If the tile contains a piece the player can move, select it.
             - Otherwise deselect the currently selected piece.
@@ -634,13 +641,14 @@ class Game:
         self.moves = capturing_moves or (defaultdict(list) if self.locked_piece else all_moves)
 
     def get_moves(self, pos: vec2) -> list[vec2]:
-        """Get all possible moves for a piece."""
+        """Get all possible moves for a piece, this does not generate new moves, it merely returns cached moves for the piece."""
         return self.moves[pos]
 
     def move_piece(self, pos: vec2, pos2: vec2) -> None:
         """Move a piece, with game logic.
 
         On top of calling :meth:`Board.move` does the following:
+
             - Begins an animation of the move.
             - If the piece reaches the other side and is not a king, it becomes a king and the turn ends immediately.
             - Otherwise if a capturing move is made, the piece is locked.
@@ -708,6 +716,7 @@ class Game:
         If it's the computer's turn, queries the computer for a move.
 
         There are some available keyboard shortcuts:
+
             - ``q``: Quit the game.
             - ``space``: Save a screenshot of the game as ``screenshot.png``.
 
@@ -949,11 +958,11 @@ class Drawer:
 
         Labels each tile with its position. In the top-left corner it displays:
 
-        * The current player's turn.
-        * The position of the selected piece, if any.
-        * The AI's score, as of its last turn.
-        * How long the AI's last computation took.
-        * The depth to which the AI last searched.
+        - The current player's turn.
+        - The position of the selected piece, if any.
+        - The AI's score, as of its last turn.
+        - How long the AI's last computation took.
+        - The depth to which the AI last searched.
 
         Parameters
         ----------
@@ -970,16 +979,14 @@ class Drawer:
 
         surfaces: list[pygame.Surface] = []
 
-        def print_text(y, text):
+        def print_text(text):
             surfaces.append(self.font_debug.render(text, False, COLOR_WHITE))
-            pygame.draw.rect(self.screen, (0, 0, 0), (0, y * self.font_debug.get_height(), surface.get_width(), surface.get_height()))
-            self.screen.blit(surface, (0, y * self.font_debug.get_height()))
 
-        print_text(0, f"Active player: {game.active_player.name}")
-        print_text(1, f"Selected piece: {game.selected_piece}")
-        print_text(2, f"Computer score: {game.computer_data.achievable_score}")
-        print_text(2, f"Elapsed time: {game.computer_data.compute_time} / {TARGET_TIME}")
-        print_text(2, f"Minimax depth: {game.computer_data.search_depth} / {MINIMUM_DEPTH}")
+        print_text(f"Active player: {game.active_player.name}")
+        print_text(f"Selected piece: {game.selected_piece}")
+        print_text(f"Computer score: {game.computer_data.achievable_score}")
+        print_text(f"Elapsed time: {game.computer_data.compute_time} / {TARGET_TIME}")
+        print_text(f"Minimax depth: {game.computer_data.search_depth} / {MINIMUM_DEPTH}")
 
         width = max(map(pygame.Surface.get_width, surfaces))
         pygame.draw.rect(self.screen, (0, 0, 0), (0, 0, width, len(surfaces) * self.font_debug.get_height()))

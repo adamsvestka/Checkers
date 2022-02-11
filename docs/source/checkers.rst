@@ -1,6 +1,9 @@
 Checkers game
 =============
 
+This module contains the game code, it handles the game logic, user input, rendering the game and animations, and the game loop.
+It does not include the AI's code nor the program's entry point.
+
 
 Board
 -----
