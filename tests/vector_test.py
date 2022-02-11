@@ -1,6 +1,6 @@
 import unittest
 
-from checkers import vec2
+from checkers import vec2, vectorize
 
 
 class VectorTest(unittest.TestCase):
@@ -46,3 +46,13 @@ class VectorTest(unittest.TestCase):
         self.assertEqual(vec2(1, 2).distance(vec2(-1, 0)), 2)
         self.assertEqual(vec2(3, 4).distance(vec2(5, 2)), 2)
         self.assertEqual(vec2(3, 4).distance(vec2(5, 1)), 3)
+
+
+class VectorizeTest(unittest.TestCase):
+    def test_vectorize(self):
+        generator = ((x, y) for x in range(3) for y in range(3))
+        self.assertCountEqual(list(vectorize(generator)), {
+            vec2(0, 0), vec2(0, 1), vec2(0, 2),
+            vec2(1, 0), vec2(1, 1), vec2(1, 2),
+            vec2(2, 0), vec2(2, 1), vec2(2, 2),
+        })

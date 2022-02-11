@@ -2,7 +2,7 @@ import unittest
 
 import itertools
 
-from checkers import Board, Game, Tile, Piece, Player, vec2
+from checkers import Board, Tile, Piece, Player, vec2
 
 START_BOARD = (
     # 1234567
@@ -34,6 +34,14 @@ class BoardTest(unittest.TestCase):
         board = Board()
         self.assertEqual(board.grid, START_BOARD)
 
+    def test_is_in_board(self):
+        self.assertTrue(Board.IsInBoard(vec2(0, 0)))
+        self.assertTrue(Board.IsInBoard(vec2(Tile.Count - 1, Tile.Count - 1)))
+        self.assertFalse(Board.IsInBoard(vec2(-1, 0)))
+        self.assertFalse(Board.IsInBoard(vec2(0, -1)))
+        self.assertFalse(Board.IsInBoard(vec2(Tile.Count, 0)))
+        self.assertFalse(Board.IsInBoard(vec2(0, Tile.Count)))
+
     def test_is_tile(self):
         self.assertFalse(Board.IsTile(vec2(0, 0)))
         self.assertTrue(Board.IsTile(vec2(0, 1)))
@@ -51,6 +59,13 @@ class BoardTest(unittest.TestCase):
             vec2(2, 1),
             vec2(2, 3),
         })
+
+    def test_board_get_set(self):
+        board = Board()
+        board.set(vec2(0, 1), Tile('1'))
+        tile = board.get(vec2(0, 1))
+        self.assertTrue(tile.piece)
+        self.assertEqual(tile.piece.player, Player.ONE)
 
     def test_board_copy(self):
         board = Board()
@@ -103,50 +118,14 @@ class BoardTest(unittest.TestCase):
             vec2(2, 1),
         })
 
-    # def test_possible_moves(self):
-    #     board = Board(START_BOARD)
-    #     self.assertEqual(len(list(board.get_player_moves(Player.ONE))), 7)
-
-    #     board2 = Board(BOARD1)
-    #     self.assertCountEqual(list(board2.get_player_moves(Player.ONE)), {
-    #         vec2(1, 0),
-    #         vec2(3, 0),
-    #         vec2(5, 0),
-    #     })
-    #     self.assertCountEqual(list(board2.get_player_moves(Player.TWO)), {
-    #         vec2(4, 3),
-    #         vec2(1, 2),
-    #     })
-
-    def test_player_moves(self):
-        class VirtualGame:
-            def __init__(self, board: Board):
-                self.active_player = Player.ONE
-                self.moves = {}
-                self.board = board
-                self.locked_piece = None
-                self.check_win = lambda: None
-
-            def generate_moves(self):
-                return Game.generate_moves(self)
-
-        game = VirtualGame(Board(START_BOARD))
-        Game.generate_moves(game)
-        self.assertEqual(len(game.moves), 4)
-        self.assertEqual(sum(map(len, game.moves.values())), 7)
-
-        game2 = VirtualGame(Board(BOARD1))
-        Game.generate_moves(game2)
-        self.assertCountEqual(itertools.chain(*game2.moves.values()), {
-            vec2(1, 0),
-        })
-        Game.next_turn(game2)
-        self.assertCountEqual(itertools.chain(*game2.moves.values()), {
-            vec2(4, 3),
-        })
-
 
 class TileTest(unittest.TestCase):
+    def test_tile_player(self):
+        self.assertEqual(Tile('1').piece.player, Player.ONE)
+        self.assertEqual(Tile('2').piece.player, Player.TWO)
+        self.assertIsNone(Tile('.').piece)
+        self.assertIsNone(Tile(' ').piece)
+
     def test_tile_empty(self):
         self.assertNotEqual(Tile.EMPTY, Tile.NO_TILE)
         self.assertTrue(Tile.EMPTY.empty())
